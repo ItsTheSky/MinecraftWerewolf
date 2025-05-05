@@ -1,0 +1,75 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:avalonia="clr-namespace:SpacedGridControl.Avalonia;assembly=SpacedGridControl.Avalonia"
+             xmlns:u="https://irihi.tech/ursa"
+             xmlns:cards="clr-namespace:MinecraftWerewolf.ViewModels.Cards"
+             xmlns:base="clr-namespace:MinecraftWerewolf.ViewModels.Base"
+             xmlns:base1="clr-namespace:MinecraftWerewolf.Views.Base"
+             xmlns:iconPacks="https://github.com/MahApps/IconPacks.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="cards:AxolotlViewModel"
+             x:Class="MinecraftWerewolf.Views.Cards.AxolotlView">
+    
+    <avalonia:SpacedGrid RowDefinitions="Auto,*,Auto,Auto" RowSpacing="5"
+                         ColumnDefinitions="*,Auto,*" ColumnSpacing="5">
+
+        <u:Banner Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" 
+                  Type="Information" Classes="Bordered" CanClose="False">
+            L'axolotl fait tomber amoureux deux joueurs de son choix.
+        </u:Banner>
+        
+        <ComboBox Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Players}" VerticalAlignment="Center"
+                  PlaceholderText="Sélectionner un joueur"
+                  SelectedValue="{Binding FirstPlayerValue}" HorizontalAlignment="Stretch">
+            <ComboBox.SelectionBoxItemTemplate>
+                <DataTemplate x:DataType="base:InternalGamePlayer">
+                    <TextBlock Text="{Binding Base.Name}" />
+                </DataTemplate>
+            </ComboBox.SelectionBoxItemTemplate>
+            
+            <ComboBox.ItemTemplate>
+                <DataTemplate x:DataType="base:InternalGamePlayer">
+                    <base1:PlayerView DataContext="{Binding Base}" Tag="{Binding}" />
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+        
+        <iconPacks:PackIconLucide Kind="Heart" Foreground="HotPink"
+                                  Width="24" Height="24" VerticalAlignment="Center"
+                                  Grid.Row="1" Grid.Column="1" />
+        
+        <ComboBox Grid.Row="1" Grid.Column="2" ItemsSource="{Binding Players}" VerticalAlignment="Center"
+                  PlaceholderText="Sélectionner un joueur"
+                  SelectedValue="{Binding SecondPlayerValue}" HorizontalAlignment="Stretch">
+            <ComboBox.SelectionBoxItemTemplate>
+                <DataTemplate x:DataType="base:InternalGamePlayer">
+                    <TextBlock Text="{Binding Base.Name}" />
+                </DataTemplate>
+            </ComboBox.SelectionBoxItemTemplate>
+            
+            <ComboBox.ItemTemplate>
+                <DataTemplate x:DataType="base:InternalGamePlayer">
+                    <base1:PlayerView DataContext="{Binding Base}" Tag="{Binding}" />
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+        
+        <u:Banner Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3"
+                  IsVisible="{Binding SameSelectedPlayers}"
+                  Type="Error" HorizontalAlignment="Stretch" Classes="Bordered">
+            Les deux joueurs doivent être différents.
+        </u:Banner>
+        
+        <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3"
+                HorizontalAlignment="Stretch" Classes="Success"
+                Theme="{DynamicResource SolidButton}"
+                Command="{Binding ValidateCommand}"
+                IsEnabled="{Binding HasSelectedTwoPlayers}">
+            Valider
+        </Button>
+
+    </avalonia:SpacedGrid>
+    
+</UserControl>

@@ -1,0 +1,41 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:avalonia="clr-namespace:SpacedGridControl.Avalonia;assembly=SpacedGridControl.Avalonia"
+             xmlns:dialogs="clr-namespace:MinecraftWerewolf.ViewModels.Dialogs"
+             xmlns:iconPacks="https://github.com/MahApps/IconPacks.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="dialogs:NightSumUpViewModel"
+             x:Class="MinecraftWerewolf.Views.Dialogs.NightSumUpDialog">
+    <StackPanel Orientation="Vertical" Spacing="5" 
+                HorizontalAlignment="Stretch">
+        
+        <TextBlock FontSize="24" FontWeight="SemiBold">Morts cette nuit</TextBlock>
+        
+        <ItemsControl ItemsSource="{Binding DeadPlayers}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="dialogs:InternalGamePlayer">
+                    <StackPanel Orientation="Horizontal" Spacing="4" Margin="20,0,0,0">
+                        <iconPacks:PackIconLucide Kind="Skull"
+                                                  Width="15" Height="15" VerticalAlignment="Center"/>
+                        
+                        <iconPacks:PackIconLucide Kind="Heart" IsVisible="{Binding WasLover}"
+                                                  Width="15" Height="15" VerticalAlignment="Center"
+                                                  Foreground="HotPink"/>
+                        
+                        <TextBlock Text="{Binding Base.Name}" VerticalAlignment="Center" FontSize="16"/>
+                        
+                        <TextBlock VerticalAlignment="Center" FontWeight="SemiLight" Text="{Binding Base.Card.DisplayName}" FontSize="12"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        
+        <TextBlock FontSize="16" FontStyle="Italic" 
+                   IsVisible="{Binding !DeadPlayers.Count}">
+            Aucune victime cette nuit
+        </TextBlock>
+        
+    </StackPanel>
+</UserControl>

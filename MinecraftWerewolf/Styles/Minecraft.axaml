@@ -1,0 +1,11 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Color x:Key="WindowColor">#3B3023</Color>        <!-- Brun terre/pierre -->
+    <Color x:Key="WindowTextColor">#FFFFFF</Color>    <!-- Texte blanc -->
+    <Color x:Key="HotlightColor">#66DD55</Color>      <!-- Vert émeraude -->
+    <Color x:Key="GrayTextColor">#ADADAD</Color>      <!-- Gris clair -->
+    <Color x:Key="HighlightTextColor">#352A1C</Color> <!-- Brun foncé -->
+    <Color x:Key="HighlightColor">#7DCBF4</Color>     <!-- Bleu ciel/eau -->
+    <Color x:Key="ButtonTextColor">#AAFFAA</Color>    <!-- Vert clair/herbe -->
+    <Color x:Key="ButtonFaceColor">#5C4033</Color>    <!-- Brun bois -->
+</ResourceDictionary>

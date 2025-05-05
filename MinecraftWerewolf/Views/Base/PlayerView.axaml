@@ -1,0 +1,46 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:core="clr-namespace:MinecraftWerewolf.Core"
+             xmlns:iconPacks="https://github.com/MahApps/IconPacks.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="core:GamePlayer"
+             x:Class="MinecraftWerewolf.Views.Base.PlayerView">
+    <UserControl.Styles>
+        <Style Selector="iconPacks|PackIconLucide">
+            <Setter Property="Width" Value="18" />
+            <Setter Property="Height" Value="18" />
+        </Style>
+    </UserControl.Styles>
+    
+    <Grid ColumnDefinitions="Auto,*,Auto" HorizontalAlignment="Stretch">
+
+        <TextBlock Grid.Column="0" Grid.ColumnSpan="3"
+                   HorizontalAlignment="Stretch" TextAlignment="Center"
+                   VerticalAlignment="Center"
+                   Text="{Binding Name}" />
+
+        <StackPanel Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" Spacing="5">
+
+            <iconPacks:PackIconLucide IsVisible="{Binding IsProtected}"
+                                      Kind="Shield" Foreground="Gold"/>
+            
+            <iconPacks:PackIconLucide IsVisible="{Binding !IsAlive}"
+                                      Kind="Skull" Foreground="Crimson"/>
+            
+            <iconPacks:PackIconLucide IsVisible="{Binding ShouldDie}"
+                                      Kind="Bone" Foreground="Firebrick"/>
+            
+            <iconPacks:PackIconLucide IsVisible="{Binding SleepingEndermite, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                      Kind="Bed" Foreground="MediumPurple"/>
+            
+            <iconPacks:PackIconLucide IsVisible="{Binding Love, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                      Kind="Heart" Foreground="HotPink"/>
+
+        </StackPanel>
+
+        <Image Grid.Column="2" Source="{Binding Card.Image}"
+               Width="20" Height="20" />
+    </Grid>
+</UserControl>

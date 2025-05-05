@@ -1,0 +1,31 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:base="clr-namespace:MinecraftWerewolf.ViewModels.Base"
+             xmlns:base1="clr-namespace:MinecraftWerewolf.Views.Base"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="base:PlayerListViewModel"
+             x:Class="MinecraftWerewolf.Views.Base.PlayerListDisplay">
+    <ItemsControl ItemsSource="{Binding Players}">
+
+        <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+                <StackPanel Orientation="Vertical" Spacing="5"
+                            HorizontalAlignment="Stretch" VerticalAlignment="Top" />
+            </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+
+        <ItemsControl.DataTemplates>
+            <DataTemplate x:DataType="base:InternalGamePlayer">
+                <Button Classes="Primary" IsEnabled="{Binding CanBeTargeted}"
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
+                        Command="{Binding PlayerSelectCommand}"
+                        CommandParameter="{Binding Base}">
+                    <base1:PlayerView DataContext="{Binding Base}" />
+                </Button>
+            </DataTemplate>
+        </ItemsControl.DataTemplates>
+
+    </ItemsControl>
+</UserControl>

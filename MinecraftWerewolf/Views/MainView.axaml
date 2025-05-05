@@ -1,0 +1,98 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:MinecraftWerewolf.ViewModels"
+             xmlns:avalonia="clr-namespace:SpacedGridControl.Avalonia;assembly=SpacedGridControl.Avalonia"
+             xmlns:base="clr-namespace:MinecraftWerewolf.Views.Base"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="MinecraftWerewolf.Views.MainView"
+             x:DataType="vm:MainViewModel">
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+         to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <vm:MainViewModel />
+    </Design.DataContext>
+
+    <avalonia:SpacedGrid RowDefinitions="Auto,*,Auto" RowSpacing="5"
+                         Margin="10"
+                         HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+
+        <!-- Night Controls -->
+
+        <TextBlock IsVisible="{Binding CurrentGame.IsNight}"
+                   Grid.Row="0"
+                   Foreground="{Binding CurrentGame.PlayingCard.Color, Converter={StaticResource ColorToBrushConverter}}"
+                   FontSize="32" FontWeight="Bold" TextAlignment="Center"
+                   Text="{Binding CurrentGame.PlayingCard.DisplayName}" />
+
+        <ContentControl IsVisible="{Binding CurrentGame.IsNight}"
+                        Grid.Row="1"
+                        HorizontalAlignment="Stretch"
+                        Content="{Binding CurrentGame.CurrentCardView}" />
+
+        <!-- Day Controls -->
+
+        <TextBlock Grid.Row="0"
+                   Foreground="Coral"
+                   FontSize="32" FontWeight="Bold" TextAlignment="Center"
+                   Text="Jours - Débat">
+            <TextBlock.IsVisible>
+                <MultiBinding Converter="{x:Static BoolConverters.And}">
+                    <Binding Path="!CurrentGame.IsNight" />
+                    <Binding Path="!DebateOver" />
+                </MultiBinding>
+            </TextBlock.IsVisible>
+        </TextBlock>
+
+        <TextBlock Grid.Row="0"
+                   Foreground="Coral"
+                   FontSize="32" FontWeight="Bold" TextAlignment="Center"
+                   Text="Jours - Décision">
+            <TextBlock.IsVisible>
+                <MultiBinding Converter="{x:Static BoolConverters.And}">
+                    <Binding Path="!CurrentGame.IsNight" />
+                    <Binding Path="DebateOver" />
+                </MultiBinding>
+            </TextBlock.IsVisible>
+        </TextBlock>
+
+        <base:PlayerListDisplay Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                Game="{Binding CurrentGame}" AllowDeadPlayers="False"
+                                PlayerSelectCommand="{Binding PlayerVotedCommand}">
+            <base:PlayerListDisplay.IsVisible>
+                <MultiBinding Converter="{x:Static BoolConverters.And}">
+                    <Binding Path="!CurrentGame.IsNight" />
+                    <Binding Path="DebateOver" />
+                </MultiBinding>
+            </base:PlayerListDisplay.IsVisible>
+        </base:PlayerListDisplay>
+
+        <Button Grid.Row="2"
+                HorizontalAlignment="Stretch"
+                Content="Forcer la fin du Débat"
+                Classes="Warning"
+                Command="{Binding StopDebateCommand}">
+            <Button.IsVisible>
+                <MultiBinding Converter="{x:Static BoolConverters.And}">
+                    <Binding Path="!CurrentGame.IsNight" />
+                    <Binding Path="!DebateOver" />
+                </MultiBinding>
+            </Button.IsVisible>
+        </Button>
+
+        <TextBlock Grid.Row="1"
+                   FontSize="52" FontWeight="Bold"
+                   Text="{Binding DebateTimerText}"
+                   HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock.IsVisible>
+                <MultiBinding Converter="{x:Static BoolConverters.And}">
+                    <Binding Path="!CurrentGame.IsNight" />
+                    <Binding Path="!DebateOver" />
+                </MultiBinding>
+            </TextBlock.IsVisible>
+        </TextBlock>
+
+    </avalonia:SpacedGrid>
+
+</UserControl>
