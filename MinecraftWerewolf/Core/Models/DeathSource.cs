@@ -1,0 +1,10 @@
+﻿namespace MinecraftWerewolf.Core.Models;
+
+public enum DeathSource
+{
+    DayVote,
+    Enderman,
+    Witch,
+    Love,
+    Endermite
+}

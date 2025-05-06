@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Media;
@@ -21,11 +22,7 @@ public class Axolotl : GameCard
 
     public override bool ShouldBeCalled(WerewolfGame game)
     {
-        if (game.GameData.ContainsKey(HasMadeLoverKey))
-            return false;
-        
-        game.GameData.Add(HasMadeLoverKey, true);
-        return true;
+        return !game.GameData.ContainsKey(HasMadeLoverKey);
     }
 
     public override Control CreateCardControl(WerewolfGame game)

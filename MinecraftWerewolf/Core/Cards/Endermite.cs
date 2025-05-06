@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Media;
 using MinecraftWerewolf.Core.Models;
@@ -20,5 +22,15 @@ public class Endermite : GameCard
     public override Control CreateCardControl(WerewolfGame game)
     {
         return new BasePlayerSelectView { DataContext = new EndermiteViewModel(game, this) };
+    }
+
+    public override bool ShouldActuallyDie(WerewolfGame game)
+    {
+        // don't die if we're not at home :)
+        return !game.Players.Any(p =>
+        {
+            Console.WriteLine($"Has sleeping endermite: {p.SleepingEndermite != null} - {p.Name}");
+            return p.SleepingEndermite != null;
+        });
     }
 }

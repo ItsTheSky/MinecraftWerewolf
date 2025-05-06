@@ -10,7 +10,7 @@ public partial class BasePlayerSelectViewModel(WerewolfGame game, GameCard sourc
 {
 
     [ObservableProperty] private bool _allowNoSelection;
-    [ObservableProperty] private string _taskText;
+    [ObservableProperty] private string _taskText = source.Description;
 
     public PlayerListViewModel ViewModel => this;
 

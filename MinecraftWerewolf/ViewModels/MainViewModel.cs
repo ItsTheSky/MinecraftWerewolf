@@ -1,14 +1,17 @@
 ﻿using System;
-using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Timers;
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MinecraftWerewolf.Core;
 using MinecraftWerewolf.Core.Cards;
-using MinecraftWerewolf.ViewModels.Base;
+using MinecraftWerewolf.Utilities;
+using MinecraftWerewolf.ViewModels.Dialogs;
 using MinecraftWerewolf.Views;
-using MinecraftWerewolf.Views.Base;
+using MinecraftWerewolf.Views.Dialogs;
+using Ursa.Controls;
 
 namespace MinecraftWerewolf.ViewModels;
 
@@ -24,6 +27,7 @@ public partial class MainViewModel : ViewModelBase
         var endermite = new Endermite();
         var ironGolem = new IronGolem();
         var axolotl = new Axolotl();
+        var spider = new Bee();
         
         CurrentGame = new WerewolfGame
         {
@@ -31,7 +35,7 @@ public partial class MainViewModel : ViewModelBase
             [
                 new GamePlayer("Player1", enderman),
                 new GamePlayer("Player2", axolotl),
-                new GamePlayer("Player3", enderman),
+                new GamePlayer("Player3", spider),
                 new GamePlayer("Player4", endermite),
                 new GamePlayer("Player5", enderman),
                 new GamePlayer("Player6", ironGolem),
@@ -86,6 +90,9 @@ public partial class MainViewModel : ViewModelBase
     [ObservableProperty] private WerewolfGame _currentGame;
     [ObservableProperty] private int _debateTimerTime;
     [ObservableProperty] private bool _debateOver = false;
+
+    [ObservableProperty] private GamePlayer? _selectedPlayer;
+    
     public string DebateTimerText => $"{DebateTimerTime / 60:D2}:{DebateTimerTime % 60:D2}";
     
     [RelayCommand]
@@ -98,11 +105,26 @@ public partial class MainViewModel : ViewModelBase
         }
         
         DebateOver = true;
+        SelectedPlayer = null;
     }
 
     [RelayCommand]
-    public void PlayerVoted(GamePlayer player)
+    public async Task FinishPlayerVote()
     {
-        Console.WriteLine("Player " + player.Name + " voted!");
+        if (SelectedPlayer == null)
+            throw new InvalidOperationException("Please select a player before voting.");
+
+        var killedPlayers = SelectedPlayer.Die();
+        
+        await Dialog.ShowModal<DeathsSumUpDialog, DeathsSumUpViewModel>(new DeathsSumUpViewModel(killedPlayers), options: new DialogOptions()
+        {
+            Mode = DialogMode.Info,
+            StartupLocation = WindowStartupLocation.CenterScreen,
+            IsCloseButtonVisible = false,
+            CanResize = false,
+            Title = "Résumé des Morts",
+        });
+        
+        CurrentGame.SetupNight();
     }
 }

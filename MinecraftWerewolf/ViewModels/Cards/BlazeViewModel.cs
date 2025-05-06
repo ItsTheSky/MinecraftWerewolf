@@ -1,17 +1,16 @@
 ﻿using System;
 using CommunityToolkit.Mvvm.Input;
 using MinecraftWerewolf.Core;
-using MinecraftWerewolf.Core.Cards;
 using MinecraftWerewolf.Core.Models;
 using MinecraftWerewolf.ViewModels.Base;
 
 namespace MinecraftWerewolf.ViewModels.Cards;
 
-public partial class EndermiteViewModel : BasePlayerSelectViewModel
+public partial class BlazeViewModel : BasePlayerSelectViewModel
 {
     private WerewolfGame game;
     
-    public EndermiteViewModel(WerewolfGame game, GameCard source) : base(game, source)
+    public BlazeViewModel(WerewolfGame game, GameCard source) : base(game, source)
     {
         this.game = game;
         base.PlayerSelectCommand = PlayerSelectCommand;
@@ -20,10 +19,8 @@ public partial class EndermiteViewModel : BasePlayerSelectViewModel
     [RelayCommand]
     public void OnPlayerSelect(GamePlayer player)
     {
-        if (player != null!)
-            player.SleepingEndermite = game.FindPlayerWithCard<Endermite>();
-        
+        player.ShouldDie = true;
         game.NextCard();
     }
-    
+
 }

@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading.Tasks;
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
-using Microsoft.VisualBasic;
 using MinecraftWerewolf.Utilities;
 
 namespace MinecraftWerewolf.Core.Models;
@@ -34,6 +31,9 @@ public abstract class GameCard
 
     public virtual bool ShouldBeCalled(WerewolfGame game)
     {
+        if (game.FindPlayerWithCard(Id)?.IsParalyzed ?? false)
+            return false;
+        
         return true;
     }
 

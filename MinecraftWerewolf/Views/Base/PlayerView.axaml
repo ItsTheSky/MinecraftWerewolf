@@ -37,6 +37,9 @@
             
             <iconPacks:PackIconLucide IsVisible="{Binding Love, Converter={x:Static ObjectConverters.IsNotNull}}"
                                       Kind="Heart" Foreground="HotPink"/>
+            
+            <iconPacks:PackIconLucide IsVisible="{Binding IsParalyzed}"
+                                      Kind="DnaOff" Foreground="Silver"/>
 
         </StackPanel>
 

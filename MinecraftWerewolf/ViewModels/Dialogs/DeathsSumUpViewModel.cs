@@ -5,16 +5,16 @@ using MinecraftWerewolf.Core;
 
 namespace MinecraftWerewolf.ViewModels.Dialogs;
 
-public partial class NightSumUpViewModel : ObservableObject
+public partial class DeathsSumUpViewModel : ObservableObject
 {
-    public NightSumUpViewModel(List<GamePlayer> killedPlayers, GamePlayer? firstLover, GamePlayer? secondLover)
+    public DeathsSumUpViewModel(List<GamePlayer> killedPlayers)
     {
         foreach (var player in killedPlayers)
         {
             var internalPlayer = new InternalGamePlayer
             {
                 Base = player,
-                WasLover = (firstLover == player || secondLover == player)
+                WasLover = player.Love != null
             };
             DeadPlayers.Add(internalPlayer);
         }

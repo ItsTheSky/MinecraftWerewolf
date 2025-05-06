@@ -4,9 +4,9 @@ using Avalonia.Markup.Xaml;
 
 namespace MinecraftWerewolf.Views.Dialogs;
 
-public partial class NightSumUpDialog : UserControl
+public partial class DeathsSumUpDialog : UserControl
 {
-    public NightSumUpDialog()
+    public DeathsSumUpDialog()
     {
         InitializeComponent();
     }

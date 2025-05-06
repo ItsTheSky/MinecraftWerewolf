@@ -13,9 +13,7 @@ public partial class IronGolemViewModel : BasePlayerSelectViewModel
     public IronGolemViewModel(WerewolfGame game, GameCard source) : base(game, source)
     {
         this.game = game;
-        AllowDeadPlayers = true;
         base.PlayerSelectCommand = PlayerSelectCommand;
-        TaskText = "Le golem de fer protège une personne au choix.";
     }
 
     [RelayCommand]

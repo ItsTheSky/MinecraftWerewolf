@@ -4,6 +4,7 @@ using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MinecraftWerewolf.Core;
+using MinecraftWerewolf.Core.Cards;
 using MinecraftWerewolf.Core.Models;
 using MinecraftWerewolf.ViewModels.Base;
 using MinecraftWerewolf.Views.Base;
@@ -48,7 +49,8 @@ public partial class AxolotlViewModel : PlayerListViewModel
 
         FirstPlayer.Love = SecondPlayer;
         SecondPlayer.Love = FirstPlayer;
-
+        
+        game.GameData.Add(Axolotl.HasMadeLoverKey, true);
         game.NextCard();
     }
 

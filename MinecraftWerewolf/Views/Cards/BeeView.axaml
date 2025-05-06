@@ -1,0 +1,43 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:cards="clr-namespace:MinecraftWerewolf.ViewModels.Cards"
+             xmlns:avalonia="clr-namespace:SpacedGridControl.Avalonia;assembly=SpacedGridControl.Avalonia"
+             xmlns:base="clr-namespace:MinecraftWerewolf.Views.Base"
+             xmlns:u="https://irihi.tech/ursa"
+             xmlns:iconPacks="https://github.com/MahApps/IconPacks.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="cards:BeeViewModel"
+             x:Class="MinecraftWerewolf.Views.Cards.BeeView">
+    <avalonia:SpacedGrid RowDefinitions="Auto,Auto,*" RowSpacing="5"
+                         ColumnDefinitions="*,*" ColumnSpacing="5">
+        
+        <u:Banner Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" 
+                  Type="Information" Classes="Bordered" CanClose="False"
+                  Content="{Binding TaskText}" />
+        
+        <!-- Attack type buttons -->
+        <ToggleButton Grid.Row="1" Grid.Column="0"
+                      IsChecked="{Binding IsProtect}" HorizontalAlignment="Stretch">
+            <StackPanel Spacing="5" HorizontalAlignment="Center" Orientation="Horizontal">
+                <iconPacks:PackIconLucide Kind="ThumbsUp"
+                                          Width="18" Height="18"/>
+                <TextBlock Text="Protéger" />
+            </StackPanel>
+        </ToggleButton>
+        
+        <ToggleButton Grid.Row="1" Grid.Column="1"
+                      IsChecked="{Binding !IsProtect}" HorizontalAlignment="Stretch">
+            <StackPanel Spacing="5" HorizontalAlignment="Center" Orientation="Horizontal">
+                <iconPacks:PackIconLucide Kind="ThumbsDown"
+                                          Width="18" Height="18"/>
+                <TextBlock Text="Attaquer" />
+            </StackPanel>
+        </ToggleButton>
+        
+        <base:PlayerListDisplay Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" 
+                                DataContext="{Binding ViewModel}" />
+        
+    </avalonia:SpacedGrid>
+</UserControl>

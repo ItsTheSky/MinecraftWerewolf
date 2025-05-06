@@ -1,29 +1,31 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MinecraftWerewolf.Core;
-using MinecraftWerewolf.Core.Cards;
 using MinecraftWerewolf.Core.Models;
 using MinecraftWerewolf.ViewModels.Base;
 
 namespace MinecraftWerewolf.ViewModels.Cards;
 
-public partial class EndermiteViewModel : BasePlayerSelectViewModel
+public partial class BeeViewModel : BasePlayerSelectViewModel
 {
     private WerewolfGame game;
-    
-    public EndermiteViewModel(WerewolfGame game, GameCard source) : base(game, source)
+
+    public BeeViewModel(WerewolfGame game, GameCard source) : base(game, source)
     {
         this.game = game;
         base.PlayerSelectCommand = PlayerSelectCommand;
     }
 
+    [ObservableProperty] private bool _isProtect = true;
+
     [RelayCommand]
     public void OnPlayerSelect(GamePlayer player)
     {
-        if (player != null!)
-            player.SleepingEndermite = game.FindPlayerWithCard<Endermite>();
+        if (IsProtect)
+            player.IsProtected = true;
+        else
+            player.ShouldDie = true;
         
         game.NextCard();
     }
-    
 }

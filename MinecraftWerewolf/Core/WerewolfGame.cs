@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using MinecraftWerewolf.Core.Models;
 using MinecraftWerewolf.ViewModels.Dialogs;
 using MinecraftWerewolf.Views.Dialogs;
@@ -21,7 +21,7 @@ public partial class WerewolfGame : ObservableObject
 
     #region Night Data
 
-    [ObservableProperty] private Queue<GameCard> _nightCards = new();
+    [ObservableProperty] private List<GameCard> _nightCards = new();
     [ObservableProperty] private GameCard _playingCard;
     [ObservableProperty] private int _currentNightIndex = 1;
     [ObservableProperty] private bool _isNight = true;
@@ -60,7 +60,6 @@ public partial class WerewolfGame : ObservableObject
         GameData.Clear();
 
         SetupNight();
-        NextCard();
     }
 
     public void SetupNight()
@@ -72,16 +71,21 @@ public partial class WerewolfGame : ObservableObject
         var cards = new List<GameCard>();
         foreach (var player in Players)
         {
-            if (player.Card is not null && !cards.Contains(player.Card))
+            if (player.Card is not null && !cards.Contains(player.Card) && player.IsAlive)
                 cards.Add(player.Card);
         }
-        
+
+        cards = cards.Where(card => card.ShouldBeCalled(this)).ToList();
         // then, sort by card order (from lower to higher)
         cards.Sort((x, y) => x.Order.CompareTo(y.Order));
         
-        // finally, add them to the night cards stack
+        Console.WriteLine($"Cards: {string.Join(", ", cards.Select(x => x.DisplayName))}");
+        
+        // finally, add them to the night cards
         foreach (var card in cards)
-            NightCards.Enqueue(card);
+            NightCards.Add(card);
+        
+        NextCard();
     }
 
     public void SetupDay()
@@ -89,10 +93,7 @@ public partial class WerewolfGame : ObservableObject
         IsNight = false;
         
         foreach (var player in Players)
-        {
-            player.IsProtected = false;
-            player.ShouldDie = false;
-        }
+            player.SetupDayVote();
     }
 
     public void NextCard()
@@ -103,12 +104,15 @@ public partial class WerewolfGame : ObservableObject
             return;
         }
 
-        PlayingCard = NightCards.Dequeue();
+        PlayingCard = NightCards.First();
         if (!PlayingCard.ShouldBeCalled(this))
         {
+            NightCards.RemoveAt(0);
             NextCard();
             return;
         }
+        
+        NightCards.RemoveAt(0);
         
         _currentView = null;
         OnPropertyChanged(nameof(CurrentCardView));
@@ -117,34 +121,20 @@ public partial class WerewolfGame : ObservableObject
     public async Task ProcessNightEnd()
     {
         var killedPlayers = new List<GamePlayer>();
-        var lovers = new List<GamePlayer>();
         foreach (var player in Players)
         {
             if (player.ShouldDie && player.Card!.ShouldActuallyDie(this))
             {
-                var love = player.Love;
-                player.Die();
-                killedPlayers.Add(player);
-                
-                if (love != null)
-                {
-                    love.Die();
-                    killedPlayers.Add(love);
-                    
-                    lovers.Add(love);
-                    lovers.Add(player);
-                }
+                killedPlayers.AddRange(player.Die());
             }
         }
-
-        await Dialog.ShowModal<NightSumUpDialog, NightSumUpViewModel>(new NightSumUpViewModel(killedPlayers,
-            lovers.Count > 0 ? lovers[0] : null,
-            lovers.Count > 1 ? lovers[1] : null), options: new DialogOptions()
+        await Dialog.ShowModal<DeathsSumUpDialog, DeathsSumUpViewModel>(new DeathsSumUpViewModel(killedPlayers), options: new DialogOptions()
         {
             Mode = DialogMode.Info,
             StartupLocation = WindowStartupLocation.CenterScreen,
             IsCloseButtonVisible = false,
-            CanResize = false
+            CanResize = false,
+            Title = "Résumé des Morts",
         });
 
         SetupDay();
@@ -154,6 +144,15 @@ public partial class WerewolfGame : ObservableObject
     {
         foreach (var player in Players)
             if (player.Card is T)
+                return player;
+
+        return null;
+    }
+
+    public GamePlayer? FindPlayerWithCard(string cardId)
+    {
+        foreach (var player in Players)
+            if (player.Card?.Id == cardId)
                 return player;
 
         return null;
