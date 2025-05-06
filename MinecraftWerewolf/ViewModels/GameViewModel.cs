@@ -11,6 +11,7 @@ using MinecraftWerewolf.Core;
 using MinecraftWerewolf.Core.Models;
 using MinecraftWerewolf.Utilities;
 using MinecraftWerewolf.ViewModels.PopOvers;
+using MinecraftWerewolf.Views;
 using MinecraftWerewolf.Views.Dialogs;
 using Ursa.Common;
 using Ursa.Controls;
@@ -21,8 +22,12 @@ namespace MinecraftWerewolf.ViewModels;
 
 public partial class GameViewModel : ObservableObject
 {
-    public GameViewModel(List<PreGamePlayer> players)
+    private MainViewModel _mainViewModel;
+    
+    public GameViewModel(List<PreGamePlayer> players, MainViewModel mainViewModel)
     {
+        _mainViewModel = mainViewModel;
+        
         CurrentGame = new WerewolfGame();
 
         var dict = new Dictionary<PreGamePlayer, GamePlayer>();
@@ -112,7 +117,7 @@ public partial class GameViewModel : ObservableObject
         if (SelectedPlayer == null)
             throw new InvalidOperationException("Please select a player before voting.");
 
-        var killedPlayers = SelectedPlayer.Die();
+        var killedPlayers = SelectedPlayer.Die(DeathSource.DayVote);
         
         await OverlayDialog.ShowModal<DeathsSumUpDialog, DeathsSumUpViewModel>(new DeathsSumUpViewModel(killedPlayers), "LocalHost", options: new OverlayDialogOptions()
         {
@@ -129,7 +134,7 @@ public partial class GameViewModel : ObservableObject
     [RelayCommand]
     public async Task ShowPlayers()
     {
-        var vm = new PlayerListDrawerViewModel { Players = new ObservableCollection<GamePlayer>(CurrentGame.Players) };
+        var vm = new PlayerListDrawerViewModel(this) { Players = new ObservableCollection<GamePlayer>(CurrentGame.Players) };
         var options = new DrawerOptions
         {
             Title = "Liste des joueurs",
@@ -140,5 +145,17 @@ public partial class GameViewModel : ObservableObject
         };
 
         await Drawer.ShowModal<PlayerListDrawer, PlayerListDrawerViewModel>(vm, "LocalHost", options);
+    }
+
+    [RelayCommand]
+    public void StopGame()
+    {
+        _mainViewModel.StopGame();
+        
+        if (debateTimer != null)
+        {
+            debateTimer.Stop();
+            debateTimer.Dispose();
+        }
     }
 }

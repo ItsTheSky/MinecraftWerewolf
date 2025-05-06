@@ -55,7 +55,14 @@ public partial class MainViewModel : ViewModelBase
     [RelayCommand]
     public void StartGame()
     {
-        GameViewModel = new GameViewModel(SetupViewModel.Players.ToList());
+        GameViewModel = new GameViewModel(SetupViewModel.Players.ToList(), this);
         IsInSetup = false;
+    }
+    
+    [RelayCommand]
+    public void StopGame()
+    {
+        GameViewModel = null;
+        IsInSetup = true;
     }
 }

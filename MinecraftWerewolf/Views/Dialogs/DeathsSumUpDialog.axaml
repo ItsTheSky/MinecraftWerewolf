@@ -2,10 +2,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:avalonia="clr-namespace:SpacedGridControl.Avalonia;assembly=SpacedGridControl.Avalonia"
-             xmlns:dialogs="clr-namespace:MinecraftWerewolf.ViewModels.Dialogs"
              xmlns:iconPacks="https://github.com/MahApps/IconPacks.Avalonia"
              xmlns:popOvers="clr-namespace:MinecraftWerewolf.ViewModels.PopOvers"
+             xmlns:models="clr-namespace:MinecraftWerewolf.Core.Models"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="popOvers:DeathsSumUpViewModel"
              x:Class="MinecraftWerewolf.Views.Dialogs.DeathsSumUpDialog">
@@ -14,18 +13,19 @@
         
         <ItemsControl ItemsSource="{Binding DeadPlayers}">
             <ItemsControl.ItemTemplate>
-                <DataTemplate x:DataType="popOvers:InternalGamePlayer">
+                <DataTemplate x:DataType="models:PlayerDeath">
                     <StackPanel Orientation="Horizontal" Spacing="4" Margin="20,0,0,0">
                         <iconPacks:PackIconLucide Kind="Skull"
                                                   Width="15" Height="15" VerticalAlignment="Center"/>
                         
-                        <iconPacks:PackIconLucide Kind="Heart" IsVisible="{Binding WasLover}"
+                        <iconPacks:PackIconLucide Kind="Heart" 
                                                   Width="15" Height="15" VerticalAlignment="Center"
+                                                  IsVisible="{Binding Player.Love, Converter={x:Static ObjectConverters.IsNotNull}}"
                                                   Foreground="HotPink"/>
                         
-                        <TextBlock Text="{Binding Base.Name}" VerticalAlignment="Center" FontSize="16"/>
+                        <TextBlock Text="{Binding Player.Name}" VerticalAlignment="Center" FontSize="16"/>
                         
-                        <TextBlock VerticalAlignment="Center" FontWeight="SemiLight" Text="{Binding Base.Card.DisplayName}" FontSize="12"/>
+                        <TextBlock VerticalAlignment="Center" FontWeight="SemiLight" Text="{Binding Source}" FontSize="12"/>
                     </StackPanel>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>

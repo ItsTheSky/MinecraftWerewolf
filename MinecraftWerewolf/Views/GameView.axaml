@@ -17,6 +17,18 @@
 
         <StackPanel Orientation="Vertical" Grid.Row="0" IsVisible="{Binding CurrentGame.IsNight}"
                     Spacing="5">
+            <Grid HorizontalAlignment="Stretch">
+                <ProgressBar Value="{Binding CurrentGame.CurrentCardProgress}"
+                             Minimum="0" Maximum="100"
+                             HorizontalAlignment="Stretch"
+                             Height="4"/>
+                
+                <Border ClipToBounds="True" CornerRadius="5" HorizontalAlignment="Center" 
+                        Background="{DynamicResource OverlayDialogMaskBrush}">
+                    <TextBlock Margin="2" Text="{Binding CurrentGame.CurrentCardProgressText}" />
+                </Border>
+            </Grid>
+            
             <Image Source="{Binding CurrentGame.PlayingCard.Image}"
                    RenderOptions.BitmapInterpolationMode="None"
                    Height="50" />
@@ -132,7 +144,7 @@
 
         <Button Grid.Row="3" HorizontalAlignment="Stretch" Classes="Secondary"
                 Command="{Binding ShowPlayersCommand}">
-            Voir la liste des Joueurs
+            Liste des Joueurs et Paramètres
         </Button>
 
     </avalonia:SpacedGrid>

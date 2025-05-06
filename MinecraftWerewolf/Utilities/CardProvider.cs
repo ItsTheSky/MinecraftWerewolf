@@ -16,7 +16,8 @@ public static class CardProvider
         new Enderman(),
         new Endermite(),
         new IronGolem(),
-        new Spider()
+        new Spider(),
+        new Creeper()
     ];
 
 }

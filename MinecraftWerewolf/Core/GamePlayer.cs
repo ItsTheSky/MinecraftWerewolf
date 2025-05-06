@@ -63,21 +63,33 @@ public partial class GamePlayer : ObservableObject
         SleepingEndermite = null;
     }
 
-    public List<GamePlayer> Die(DeathSource? forceSource = null)
+    public List<PlayerDeath> Die(DeathSource? forceSource = null)
     {
-        var source = forceSource ?? LastDeathSource;
+        var source = (forceSource ?? LastDeathSource)!.Value;
+
+        var deadPlayers = new List<PlayerDeath> { new(this, source) };
+        
+        void CheckAsCreeper()
+        {
+            if (Card!.Id == "creeper" && IsCharged)
+            {
+                if (LeftPlayer != null)
+                    deadPlayers.AddRange(LeftPlayer.Die(DeathSource.Creeper));
+                if (RightPlayer != null)
+                    deadPlayers.AddRange(RightPlayer.Die(DeathSource.Creeper));
+            }
+        }
         
         if (source == DeathSource.DayVote) // always die when vote.
         {
             Love?.ActuallyDie();
+            CheckAsCreeper();
             ActuallyDie();
-            return [this];
+            return deadPlayers;
         }
         
-        if (IsProtected && source != DeathSource.Love) // is protected: don't die if not love
+        if (IsProtected && source != DeathSource.Love && source != DeathSource.Creeper)
             return [];
-
-        var deadPlayers = new List<GamePlayer> { this };
 
         if (Love != null)
         {
@@ -91,6 +103,7 @@ public partial class GamePlayer : ObservableObject
             deadPlayers.AddRange(SleepingEndermite.Die(DeathSource.Endermite));
         }
 
+        CheckAsCreeper();
         ActuallyDie();
         return deadPlayers;
     }

@@ -6,5 +6,6 @@ public enum DeathSource
     Enderman,
     Witch,
     Love,
+    Creeper,
     Endermite
 }

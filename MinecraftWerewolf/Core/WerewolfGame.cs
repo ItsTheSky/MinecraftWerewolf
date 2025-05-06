@@ -16,6 +16,18 @@ namespace MinecraftWerewolf.Core;
 
 public partial class WerewolfGame : ObservableObject
 {
+    public WerewolfGame()
+    {
+        PropertyChanged += (sender, args) =>
+        {
+            if (args.PropertyName is nameof(CurrentCardIndex) or nameof(MaxCards))
+            {
+                OnPropertyChanged(nameof(CurrentCardProgress));
+                OnPropertyChanged(nameof(CurrentCardProgressText));
+            }
+        };
+    }
+    
     public Dictionary<string, object> GameData { get; } = new();
 
     [ObservableProperty] private ObservableCollection<GamePlayer> _players = new();
@@ -26,6 +38,12 @@ public partial class WerewolfGame : ObservableObject
     [ObservableProperty] private GameCard _playingCard;
     [ObservableProperty] private int _currentNightIndex = 1;
     [ObservableProperty] private bool _isNight = true;
+
+    [ObservableProperty] private int _maxCards;
+    [ObservableProperty] private int _currentCardIndex;
+    
+    public float CurrentCardProgress => ((float)CurrentCardIndex / MaxCards) * 100f;
+    public string CurrentCardProgressText => $"{CurrentCardIndex}/{MaxCards} Cartes";
     
     private Control? _currentView;
     public Control? CurrentCardView
@@ -81,6 +99,9 @@ public partial class WerewolfGame : ObservableObject
         
         Console.WriteLine($"Cards: {string.Join(", ", cards.Select(x => x.DisplayName))}");
         
+        MaxCards = cards.Count;
+        CurrentCardIndex = 0;
+        
         // finally, add them to the night cards
         foreach (var card in cards)
             NightCards.Add(card);
@@ -113,6 +134,7 @@ public partial class WerewolfGame : ObservableObject
         }
         
         NightCards.RemoveAt(0);
+        CurrentCardIndex++;
         
         _currentView = null;
         OnPropertyChanged(nameof(CurrentCardView));
@@ -120,7 +142,7 @@ public partial class WerewolfGame : ObservableObject
     
     public async Task ProcessNightEnd()
     {
-        var killedPlayers = new List<GamePlayer>();
+        var killedPlayers = new List<PlayerDeath>();
         foreach (var player in Players)
         {
             if (player.ShouldDie && player.Card!.ShouldActuallyDie(this))
@@ -128,6 +150,7 @@ public partial class WerewolfGame : ObservableObject
                 killedPlayers.AddRange(player.Die());
             }
         }
+
         await OverlayDialog.ShowModal<DeathsSumUpDialog, DeathsSumUpViewModel>(new DeathsSumUpViewModel(killedPlayers), "LocalHost", options: new OverlayDialogOptions()
         {
             Mode = DialogMode.Info,
