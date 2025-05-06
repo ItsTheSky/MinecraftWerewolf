@@ -142,25 +142,34 @@ public partial class WerewolfGame : ObservableObject
     
     public async Task ProcessNightEnd()
     {
-        var killedPlayers = new List<PlayerDeath>();
-        foreach (var player in Players)
+        try
         {
-            if (player.ShouldDie && player.Card!.ShouldActuallyDie(this))
+            var killedPlayers = new List<PlayerDeath>();
+            foreach (var player in Players)
             {
-                killedPlayers.AddRange(player.Die());
+                if (player.ShouldDie && player.Card!.ShouldActuallyDie(this))
+                {
+                    killedPlayers.AddRange(player.Die());
+                }
             }
+
+            await OverlayDialog.ShowModal<DeathsSumUpDialog, DeathsSumUpViewModel>(
+                new DeathsSumUpViewModel(killedPlayers), "LocalHost", options: new OverlayDialogOptions()
+                {
+                    Mode = DialogMode.Info,
+                    IsCloseButtonVisible = false,
+                    CanResize = false,
+                    Title = "Résumé des Morts",
+                    Buttons = DialogButton.OK
+                });
+
+            SetupDay();
         }
-
-        await OverlayDialog.ShowModal<DeathsSumUpDialog, DeathsSumUpViewModel>(new DeathsSumUpViewModel(killedPlayers), "LocalHost", options: new OverlayDialogOptions()
+        catch (Exception e)
         {
-            Mode = DialogMode.Info,
-            IsCloseButtonVisible = false,
-            CanResize = false,
-            Title = "Résumé des Morts",
-            Buttons = DialogButton.OK
-        });
-
-        SetupDay();
+            Console.WriteLine(e);
+            throw;
+        }
     }
 
     public GamePlayer? FindPlayerWithCard<T>()

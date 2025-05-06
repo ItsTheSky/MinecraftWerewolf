@@ -19,7 +19,7 @@ public partial class BlazeViewModel : BasePlayerSelectViewModel
     [RelayCommand]
     public void OnPlayerSelect(GamePlayer player)
     {
-        player.ShouldDie = true;
+        player.PrepareDeath(DeathSource.Blaze);
         game.NextCard();
     }
 

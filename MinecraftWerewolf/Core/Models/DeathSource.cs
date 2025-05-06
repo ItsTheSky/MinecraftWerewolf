@@ -7,5 +7,7 @@ public enum DeathSource
     Witch,
     Love,
     Creeper,
-    Endermite
+    Endermite,
+    Blaze,
+    Bee
 }

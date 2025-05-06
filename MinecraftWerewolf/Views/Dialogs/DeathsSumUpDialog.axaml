@@ -5,6 +5,7 @@
              xmlns:iconPacks="https://github.com/MahApps/IconPacks.Avalonia"
              xmlns:popOvers="clr-namespace:MinecraftWerewolf.ViewModels.PopOvers"
              xmlns:models="clr-namespace:MinecraftWerewolf.Core.Models"
+             xmlns:converters="clr-namespace:Avalonia.Controls.Converters;assembly=Avalonia.Controls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="popOvers:DeathsSumUpViewModel"
              x:Class="MinecraftWerewolf.Views.Dialogs.DeathsSumUpDialog">
@@ -14,8 +15,10 @@
         <ItemsControl ItemsSource="{Binding DeadPlayers}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate x:DataType="models:PlayerDeath">
-                    <StackPanel Orientation="Horizontal" Spacing="4" Margin="20,0,0,0">
-                        <iconPacks:PackIconLucide Kind="Skull"
+                    <StackPanel Orientation="Horizontal" Spacing="4">
+                        <Border HorizontalAlignment="Left" Width="{Binding LeftSpacing}" />
+                        
+                        <iconPacks:PackIconLucide Kind="CornerDownRight" IsVisible="{Binding ShowArrow}"
                                                   Width="15" Height="15" VerticalAlignment="Center"/>
                         
                         <iconPacks:PackIconLucide Kind="Heart" 
@@ -25,7 +28,9 @@
                         
                         <TextBlock Text="{Binding Player.Name}" VerticalAlignment="Center" FontSize="16"/>
                         
-                        <TextBlock VerticalAlignment="Center" FontWeight="SemiLight" Text="{Binding Source}" FontSize="12"/>
+                        <TextBlock VerticalAlignment="Center" FontWeight="SemiLight" 
+                                   Text="{Binding Source, StringFormat='Cause: {0}'}" 
+                                   FontSize="12"/>
                     </StackPanel>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>

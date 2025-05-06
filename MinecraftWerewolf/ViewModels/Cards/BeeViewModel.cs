@@ -26,7 +26,7 @@ public partial class BeeViewModel : BasePlayerSelectViewModel
         if (IsProtect)
             player.IsProtected = true;
         else
-            player.ShouldDie = true;
+            player.PrepareDeath(DeathSource.Bee);
         
         game.NextCard();
     }

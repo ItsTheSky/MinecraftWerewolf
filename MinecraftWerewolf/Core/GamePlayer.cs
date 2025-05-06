@@ -63,47 +63,35 @@ public partial class GamePlayer : ObservableObject
         SleepingEndermite = null;
     }
 
-    public List<PlayerDeath> Die(DeathSource? forceSource = null)
+    public List<PlayerDeath> Die(DeathSource? forceSource = null, int level = 0)
     {
         var source = (forceSource ?? LastDeathSource)!.Value;
 
-        var deadPlayers = new List<PlayerDeath> { new(this, source) };
+        var deadPlayers = new List<PlayerDeath> { new(this, source, level) };
         
-        void CheckAsCreeper()
-        {
-            if (Card!.Id == "creeper" && IsCharged)
-            {
-                if (LeftPlayer != null)
-                    deadPlayers.AddRange(LeftPlayer.Die(DeathSource.Creeper));
-                if (RightPlayer != null)
-                    deadPlayers.AddRange(RightPlayer.Die(DeathSource.Creeper));
-            }
-        }
-        
-        if (source == DeathSource.DayVote) // always die when vote.
-        {
-            Love?.ActuallyDie();
-            CheckAsCreeper();
-            ActuallyDie();
-            return deadPlayers;
-        }
-        
-        if (IsProtected && source != DeathSource.Love && source != DeathSource.Creeper)
+        if (IsProtected && source != DeathSource.Love && source != DeathSource.Creeper && source != DeathSource.DayVote)
             return [];
 
         if (Love != null)
         {
             Love.Love = null; // avoid circular references
-            deadPlayers.AddRange(Love.Die(DeathSource.Love));
+            deadPlayers.AddRange(Love.Die(DeathSource.Love, level + 1));
             Love.Love = this; // restore love
         }
 
         if (SleepingEndermite != null)
         {
-            deadPlayers.AddRange(SleepingEndermite.Die(DeathSource.Endermite));
+            deadPlayers.AddRange(SleepingEndermite.Die(DeathSource.Endermite, level + 1));
         }
 
-        CheckAsCreeper();
+        if (Card!.Id == "creeper" && IsCharged)
+        {
+            if (LeftPlayer != null)
+                deadPlayers.AddRange(LeftPlayer.Die(DeathSource.Creeper, level + 1));
+            if (RightPlayer != null)
+                deadPlayers.AddRange(RightPlayer.Die(DeathSource.Creeper, level + 1));
+        }
+        
         ActuallyDie();
         return deadPlayers;
     }
