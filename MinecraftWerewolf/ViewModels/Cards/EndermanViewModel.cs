@@ -14,6 +14,9 @@ public partial class EndermanViewModel : BasePlayerSelectViewModel
     {
         this.game = game;
         base.PlayerSelectCommand = PlayerSelectCommand;
+
+        AllowSelf = true;
+        ListType = PlayerListType.OnlyAlive;
     }
 
     [RelayCommand]

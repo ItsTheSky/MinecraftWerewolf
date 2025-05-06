@@ -1,0 +1,29 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:popOvers="clr-namespace:MinecraftWerewolf.ViewModels.PopOvers"
+             xmlns:base="clr-namespace:MinecraftWerewolf.Core"
+             xmlns:base1="clr-namespace:MinecraftWerewolf.Views.Base"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="popOvers:PlayerListDrawerViewModel"
+             x:Class="MinecraftWerewolf.Views.Dialogs.PlayerListDrawer">
+    
+    <ItemsControl ItemsSource="{Binding Players}" HorizontalAlignment="Stretch">
+
+        <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+                <StackPanel Orientation="Vertical" Spacing="5"
+                            HorizontalAlignment="Stretch" VerticalAlignment="Top" />
+            </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+
+        <ItemsControl.DataTemplates>
+            <DataTemplate x:DataType="base:GamePlayer">
+                <base1:PlayerView DataContext="{Binding .}" />
+            </DataTemplate>
+        </ItemsControl.DataTemplates>
+
+    </ItemsControl>
+    
+</UserControl>

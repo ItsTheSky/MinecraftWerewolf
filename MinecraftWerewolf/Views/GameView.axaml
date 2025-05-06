@@ -1,0 +1,139 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:avalonia="clr-namespace:SpacedGridControl.Avalonia;assembly=SpacedGridControl.Avalonia"
+             xmlns:base="clr-namespace:MinecraftWerewolf.Views.Base"
+             xmlns:core="clr-namespace:MinecraftWerewolf.Core"
+             xmlns:viewModels="clr-namespace:MinecraftWerewolf.ViewModels"
+             x:DataType="viewModels:GameViewModel"
+             x:Class="MinecraftWerewolf.Views.GameView">
+    <avalonia:SpacedGrid RowDefinitions="Auto,*,Auto,Auto" RowSpacing="5"
+                         Margin="10"
+                         HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+
+        <!-- Night Controls -->
+
+        <StackPanel Orientation="Vertical" Grid.Row="0" IsVisible="{Binding CurrentGame.IsNight}"
+                    Spacing="5">
+            <Image Source="{Binding CurrentGame.PlayingCard.Image}"
+                   RenderOptions.BitmapInterpolationMode="None"
+                   Height="50" />
+
+            <TextBlock IsVisible="{Binding CurrentGame.IsNight}"
+                       Foreground="{Binding CurrentGame.PlayingCard.Color, Converter={StaticResource ColorToBrushConverter}}"
+                       FontSize="32" FontWeight="Bold" TextAlignment="Center"
+                       Text="{Binding CurrentGame.PlayingCard.DisplayName}" />
+        </StackPanel>
+
+        <ScrollViewer Grid.Row="1">
+            <ContentControl IsVisible="{Binding CurrentGame.IsNight}"
+                            HorizontalAlignment="Stretch"
+                            Content="{Binding CurrentGame.CurrentCardView}" />
+        </ScrollViewer>
+
+        <!-- Day Controls -->
+
+        <TextBlock Grid.Row="0"
+                   Foreground="Coral"
+                   FontSize="32" FontWeight="Bold" TextAlignment="Center"
+                   Text="Jours - Débat">
+            <TextBlock.IsVisible>
+                <MultiBinding Converter="{x:Static BoolConverters.And}">
+                    <Binding Path="!CurrentGame.IsNight" />
+                    <Binding Path="!DebateOver" />
+                </MultiBinding>
+            </TextBlock.IsVisible>
+        </TextBlock>
+
+        <TextBlock Grid.Row="0"
+                   Foreground="Coral"
+                   FontSize="32" FontWeight="Bold" TextAlignment="Center"
+                   Text="Jours - Décision">
+            <TextBlock.IsVisible>
+                <MultiBinding Converter="{x:Static BoolConverters.And}">
+                    <Binding Path="!CurrentGame.IsNight" />
+                    <Binding Path="DebateOver" />
+                </MultiBinding>
+            </TextBlock.IsVisible>
+        </TextBlock>
+
+        <ComboBox Grid.Row="1" Grid.Column="2" ItemsSource="{Binding CurrentGame.Players}" VerticalAlignment="Center"
+                  PlaceholderText="Sélectionner un joueur"
+                  SelectedValue="{Binding SelectedPlayer}" HorizontalAlignment="Stretch">
+            <ComboBox.IsVisible>
+                <MultiBinding Converter="{x:Static BoolConverters.And}">
+                    <Binding Path="!CurrentGame.IsNight" />
+                    <Binding Path="DebateOver" />
+                </MultiBinding>
+            </ComboBox.IsVisible>
+
+            <ComboBox.SelectionBoxItemTemplate>
+                <DataTemplate x:DataType="core:GamePlayer">
+                    <TextBlock Text="{Binding Name}" />
+                </DataTemplate>
+            </ComboBox.SelectionBoxItemTemplate>
+
+            <ComboBox.ItemTemplate>
+                <DataTemplate x:DataType="core:GamePlayer">
+                    <base:PlayerView DataContext="{Binding}" />
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+
+        <Button Grid.Row="2"
+                HorizontalAlignment="Stretch"
+                Content="Forcer la fin du Débat"
+                Classes="Warning"
+                Command="{Binding StopDebateCommand}">
+            <Button.IsVisible>
+                <MultiBinding Converter="{x:Static BoolConverters.And}">
+                    <Binding Path="!CurrentGame.IsNight" />
+                    <Binding Path="!DebateOver" />
+                </MultiBinding>
+            </Button.IsVisible>
+        </Button>
+
+        <Button Grid.Row="2"
+                HorizontalAlignment="Stretch"
+                Classes="Success"
+                IsEnabled="{Binding SelectedPlayer, Converter={x:Static ObjectConverters.IsNotNull}}"
+                Command="{Binding FinishPlayerVoteCommand}">
+            <Button.IsVisible>
+                <MultiBinding Converter="{x:Static BoolConverters.And}">
+                    <Binding Path="!CurrentGame.IsNight" />
+                    <Binding Path="DebateOver" />
+                </MultiBinding>
+            </Button.IsVisible>
+
+            <Button.Content>
+                <Grid>
+                    <TextBlock IsVisible="{Binding SelectedPlayer, Converter={x:Static ObjectConverters.IsNull}}">
+                        En attente d'une séléction ...
+                    </TextBlock>
+                    <TextBlock IsVisible="{Binding SelectedPlayer, Converter={x:Static ObjectConverters.IsNotNull}}"
+                               Text="{Binding SelectedPlayer.Name, StringFormat='Sélectionner (= tuer) {0}'}" />
+                </Grid>
+            </Button.Content>
+        </Button>
+
+        <TextBlock Grid.Row="1"
+                   FontSize="52" FontWeight="Bold"
+                   Text="{Binding DebateTimerText}"
+                   HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock.IsVisible>
+                <MultiBinding Converter="{x:Static BoolConverters.And}">
+                    <Binding Path="!CurrentGame.IsNight" />
+                    <Binding Path="!DebateOver" />
+                </MultiBinding>
+            </TextBlock.IsVisible>
+        </TextBlock>
+
+        <Button Grid.Row="3" HorizontalAlignment="Stretch" Classes="Secondary"
+                Command="{Binding ShowPlayersCommand}">
+            Voir la liste des Joueurs
+        </Button>
+
+    </avalonia:SpacedGrid>
+</UserControl>

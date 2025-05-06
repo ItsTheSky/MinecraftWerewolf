@@ -1,0 +1,88 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:avalonia="clr-namespace:SpacedGridControl.Avalonia;assembly=SpacedGridControl.Avalonia"
+             xmlns:viewModels="clr-namespace:MinecraftWerewolf.ViewModels"
+             xmlns:models="clr-namespace:MinecraftWerewolf.Core.Models"
+             xmlns:styles="clr-namespace:MinecraftWerewolf.Styles"
+             xmlns:iconPacks="https://github.com/MahApps/IconPacks.Avalonia"
+             xmlns:views="clr-namespace:MinecraftWerewolf.Views"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="viewModels:SetupViewModel"
+             x:Class="MinecraftWerewolf.Views.SetupView">
+    <avalonia:SpacedGrid RowDefinitions="Auto,*,Auto,Auto" RowSpacing="10">
+        
+        <TextBlock Grid.Row="0" FontSize="26" Text="Mise en Place" FontWeight="SemiBold" TextAlignment="Center" />
+        
+        <ScrollViewer Grid.Row="1" HorizontalAlignment="Stretch" VerticalScrollBarVisibility="Visible">
+            <ItemsControl HorizontalAlignment="Stretch" ItemsSource="{Binding Players}">
+                
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Spacing="10" Orientation="Vertical" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="models:PreGamePlayer">
+                        <styles:Card>
+                            <avalonia:SpacedGrid ColumnDefinitions="Auto,*,Auto,Auto" ColumnSpacing="10"
+                                                 RowDefinitions="*,*" RowSpacing="0">
+                                
+                                <Image Grid.Column="0" Grid.Row="0" Grid.RowSpan="2"
+                                       RenderOptions.BitmapInterpolationMode="None"
+                                       Source="{Binding Card.Image}" Width="40" Height="40" />
+                                
+                                <TextBlock Grid.Row="0" Grid.Column="1" FontWeight="SemiBold" FontSize="20"
+                                           VerticalAlignment="Bottom" HorizontalAlignment="Left"
+                                           Margin="10,0,0,-5"
+                                           Text="{Binding Name}" />
+                                
+                                <TextBlock Grid.Row="1" Grid.Column="1" FontWeight="Light" FontSize="18"
+                                           Margin="10,-5,0,0" FontStyle="Italic"
+                                           VerticalAlignment="Top" HorizontalAlignment="Left"
+                                           Text="{Binding Card.DisplayName}" />
+                                
+                                <Button Grid.Row="0" Grid.RowSpan="2" Grid.Column="2" Padding="10" Classes="Success"
+                                        Command="{Binding $parent[views:SetupView].((viewModels:SetupViewModel)DataContext).EditPlayerCommand}"
+                                        CommandParameter="{Binding .}">
+                                    <iconPacks:PackIconLucide Kind="PencilRuler" Width="20" Height="20" />
+                                </Button>
+                                
+                                <Button Grid.Row="0" Grid.RowSpan="2" Grid.Column="3" Padding="10" Classes="Danger"
+                                        Command="{Binding $parent[views:SetupView].((viewModels:SetupViewModel)DataContext).RemovePlayerCommand}"
+                                        CommandParameter="{Binding .}">
+                                    <iconPacks:PackIconLucide Kind="Trash2" Width="20" Height="20" />
+                                </Button>
+                                
+                            </avalonia:SpacedGrid>
+                        </styles:Card>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+                
+            </ItemsControl>
+        </ScrollViewer>
+        
+        <Button Grid.Row="2" Padding="10" Classes="Success"
+                HorizontalAlignment="Stretch"
+                Command="{Binding AddPlayerCommand}">
+            <StackPanel Orientation="Horizontal" Spacing="5">
+                <iconPacks:PackIconLucide Kind="Plus" Width="24" Height="24" />
+                
+                <TextBlock VerticalAlignment="Center" FontSize="20" Text="Ajouter un joueur" />
+            </StackPanel>
+        </Button>
+        
+        <Button Grid.Row="3" Padding="10" Theme="{StaticResource SolidButton}" Classes="Success"
+                HorizontalAlignment="Stretch"
+                Command="{Binding StartGameCommand}">
+            <StackPanel Orientation="Horizontal" Spacing="5">
+                <iconPacks:PackIconLucide Kind="Play" Width="24" Height="24" />
+                
+                <TextBlock VerticalAlignment="Center" FontSize="20" Text="Lancer la partie!" />
+            </StackPanel>
+        </Button>
+        
+    </avalonia:SpacedGrid>
+</UserControl>

@@ -12,6 +12,14 @@
             <Setter Property="Width" Value="18" />
             <Setter Property="Height" Value="18" />
         </Style>
+        <Style Selector="TextBlock.DeadPlayer">
+            <Setter Property="TextDecorations">
+                <TextDecorationCollection>
+                    <TextDecoration Location="Strikethrough" StrokeThickness="8" Stroke="Red" />
+                </TextDecorationCollection>
+            </Setter>
+            <Setter Property="Opacity" Value="0.75" />
+        </Style>
     </UserControl.Styles>
     
     <Grid ColumnDefinitions="Auto,*,Auto" HorizontalAlignment="Stretch">
@@ -19,6 +27,7 @@
         <TextBlock Grid.Column="0" Grid.ColumnSpan="3"
                    HorizontalAlignment="Stretch" TextAlignment="Center"
                    VerticalAlignment="Center"
+                   Classes.DeadPlayer="{Binding !IsAlive}"
                    Text="{Binding Name}" />
 
         <StackPanel Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" Spacing="5">

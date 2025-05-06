@@ -9,6 +9,14 @@
         <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
         <AndroidPackageFormat>apk</AndroidPackageFormat>
         <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
+
+        <AndroidKeyStore>true</AndroidKeyStore>
+        <AndroidSigningKeyStore>B:\Sky\Projets\CSharp\Prolizy\Prolizy\Prolizy.Viewer\Prolizy.Viewer.Android\Keys\prolizy.keystore</AndroidSigningKeyStore>
+        <JavaSdkDirectory>B:\Sky\JDKs\17</JavaSdkDirectory>
+        <AndroidSigningKeyAlias>prolizy</AndroidSigningKeyAlias>
+        <AndroidSigningKeyPass>M!necraft06</AndroidSigningKeyPass>
+        <AndroidSigningStorePass>M!necraft06</AndroidSigningStorePass>
+        <AndroidSdkDirectory>C:\Users\Sky\AppData\Local\Android\Sdk</AndroidSdkDirectory>
     </PropertyGroup>
 
     <ItemGroup>
@@ -22,7 +30,6 @@
         <PackageReference Include="Xamarin.AndroidX.Core.SplashScreen"/>
         <PackageReference Include="IconPacks.Avalonia" />
         <PackageReference Include="Irihi.Ursa" />
-        <PackageReference Include="Irihi.Ursa.ReactiveUIExtension" />
         <PackageReference Include="Irihi.Ursa.Themes.Semi" />
         <PackageReference Include="Semi.Avalonia" />
         <PackageReference Include="SpacedGrid-Avalonia" />

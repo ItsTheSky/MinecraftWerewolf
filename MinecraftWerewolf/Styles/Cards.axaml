@@ -1,0 +1,164 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:styles="clr-namespace:MinecraftWerewolf.Styles">
+    <Design.PreviewWith>
+        <Border Padding="20">
+            <StackPanel>
+                <styles:Card
+                    Margin="8"
+                    MaxHeight="450"
+                    Name="ModelCard"
+                    Width="330">
+                    <TextBlock Text="Normal Card" />
+                </styles:Card>
+                <styles:Card
+                    Margin="8"
+                    MaxHeight="450"
+                    Classes="success"
+                    Width="330">
+                    <TextBlock Text="Success Card" />
+                </styles:Card>
+                <styles:Card
+                    Margin="8"
+                    MaxHeight="450"
+                    Classes="info"
+                    Width="330">
+                    <TextBlock Text="Info Card" />
+                </styles:Card>
+                <styles:Card
+                    Margin="8"
+                    MaxHeight="450"
+                    Classes="accent"
+                    Width="330">
+                    <TextBlock Text="Accent Card" />
+                </styles:Card>
+                <styles:Card
+                    Margin="8"
+                    MaxHeight="450"
+                    Classes="disabled"
+                    Width="330">
+                    <TextBlock Text="Disabled Card (by classes)" />
+                </styles:Card>
+                <styles:Card
+                    Margin="8"
+                    MaxHeight="450"
+                    IsCardVisualsEnabled="False"
+                    Width="330">
+                    <TextBlock Text="Disabled Card (by property)" />
+                </styles:Card>
+                <styles:Card
+                    Margin="8"
+                    MaxHeight="450"
+                    Classes="transparent"
+                    Width="330">
+                    <TextBlock Text="Disabled Card (by property)" />
+                </styles:Card>
+                <styles:Card
+                    Margin="8"
+                    MaxHeight="450"
+                    Classes="solid"
+                    Width="330">
+                    <TextBlock Text="Solid Card" />
+                </styles:Card>
+            </StackPanel>
+        </Border>
+    </Design.PreviewWith>
+
+    <ControlTheme x:Key="{x:Type styles:Card}" TargetType="styles:Card">
+        <Setter Property="Background" Value="#242429"/>
+        <Setter Property="BorderBrush" Value="#3c3c44" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Padding" Value="14,16,14,16" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="FontWeight" Value="Normal" />
+        <Setter Property="Border.CornerRadius" Value="10" />
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="KeyboardNavigation.IsTabStop" Value="False" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Grid>
+                        <Border
+                            x:Name="ContentBorder"
+                            Padding="{TemplateBinding Padding}"
+                            HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                            VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{TemplateBinding Border.CornerRadius}">
+                            <ContentPresenter
+                                x:Name="ContentPresenter"
+                                HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" 
+                                Content="{TemplateBinding Content}" />
+                        </Border>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        
+        <Styles>
+            
+            <!-- Success -->
+            <Style Selector="styles|Card.success">
+                <Setter Property="Background" Value="{DynamicResource ThemeGreenColorTransparent}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource ThemeGreenColorTransparent}" />
+                <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+                    <Setter Property="Foreground" Value="{DynamicResource ButtonForeground}" />
+                </Style>
+            </Style>
+            
+            <!-- Info -->
+            <Style Selector="styles|Card.info">
+                <Setter Property="Background" Value="{DynamicResource ThemeDarkBlueColorTransparent}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource ThemeDarkBlueColorTransparent}" />
+                <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+                    <Setter Property="Foreground" Value="{DynamicResource ButtonForeground}" />
+                </Style>
+            </Style>
+            
+            <!-- Accent -->
+            <Style Selector="styles|Card.accent">
+                <Setter Property="Background" Value="{DynamicResource SystemAccentColorLight3}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource SystemAccentColorLight3}" />
+                <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+                    <Setter Property="Foreground" Value="{DynamicResource ButtonForeground}" />
+                </Style>
+            </Style>
+            
+            <!-- Transparent -->
+            <Style Selector="styles|Card.transparent">
+                <Setter Property="Background" Value="{DynamicResource ThemeControlTransparentBrush}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource ThemeControlTransparentBrush}" />
+                <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+                    <Setter Property="Foreground" Value="{DynamicResource ButtonForeground}" />
+                </Style>
+            </Style>
+            
+            <!-- Disabled -->
+            <Style Selector="styles|Card.disabled">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="BorderBrush" Value="Transparent" />
+                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="Padding" Value="0" />
+                <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+                    <Setter Property="Foreground" Value="Transparent" />
+                </Style>
+            </Style>
+            
+            <!-- Solid -->
+            <Style Selector="styles|Card.solid">
+                <Setter Property="Background" Value="{DynamicResource ThemePrimaryColor}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource ThemeBlueGreyColor}" />
+                <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+                    <Setter Property="Foreground" Value="{DynamicResource ThemePrimaryColor}" />
+                </Style>
+            </Style>
+            
+        </Styles>
+    </ControlTheme>
+</ResourceDictionary>

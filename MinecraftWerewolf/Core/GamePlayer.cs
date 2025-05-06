@@ -24,6 +24,10 @@ public partial class GamePlayer : ObservableObject
     [ObservableProperty] private GamePlayer? _sleepingEndermite;
     [ObservableProperty] private bool _isParalyzed;
     
+    [ObservableProperty] private bool _isCharged;
+    [ObservableProperty] private GamePlayer? _leftPlayer;
+    [ObservableProperty] private GamePlayer? _rightPlayer;
+    
     [ObservableProperty] private DeathSource? _lastDeathSource;
 
     #endregion
@@ -70,7 +74,7 @@ public partial class GamePlayer : ObservableObject
             return [this];
         }
         
-        if (IsProtected) // is protected: don't die
+        if (IsProtected && source != DeathSource.Love) // is protected: don't die if not love
             return [];
 
         var deadPlayers = new List<GamePlayer> { this };

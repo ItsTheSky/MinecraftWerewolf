@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using MinecraftWerewolf.Core;
 
-namespace MinecraftWerewolf.ViewModels.Dialogs;
+namespace MinecraftWerewolf.ViewModels.PopOvers;
 
 public partial class DeathsSumUpViewModel : ObservableObject
 {

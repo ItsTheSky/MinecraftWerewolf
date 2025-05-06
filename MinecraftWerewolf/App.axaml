@@ -5,7 +5,7 @@
              xmlns:semi="https://irihi.tech/semi"
              xmlns:converters="clr-namespace:Avalonia.Markup.Xaml.Converters;assembly=Avalonia.Markup.Xaml"
              xmlns:utilities="clr-namespace:MinecraftWerewolf.Utilities"
-             RequestedThemeVariant="{x:Static utilities:MinecraftTheme.Minecraft}">
+             RequestedThemeVariant="Dark">
     <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
     <Application.Styles>
@@ -17,10 +17,9 @@
 
     <Application.Resources>
         <ResourceDictionary>
-            <ResourceDictionary.ThemeDictionaries>
-                <ResourceInclude x:Key="{x:Static utilities:MinecraftTheme.Minecraft}" 
-                                 Source="avares://MinecraftWerewolf/Styles/Minecraft.axaml" />
-            </ResourceDictionary.ThemeDictionaries>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="avares://MinecraftWerewolf/Styles/Cards.axaml" />
+            </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
         
         <converters:ColorToBrushConverter x:Key="ColorToBrushConverter" />

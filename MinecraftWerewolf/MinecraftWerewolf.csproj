@@ -23,7 +23,6 @@
         
         <PackageReference Include="IconPacks.Avalonia" />
         <PackageReference Include="Irihi.Ursa" />
-        <PackageReference Include="Irihi.Ursa.ReactiveUIExtension" />
         <PackageReference Include="Irihi.Ursa.Themes.Semi" />
         <PackageReference Include="Semi.Avalonia" />
         <PackageReference Include="SpacedGrid-Avalonia" />

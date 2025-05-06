@@ -1,8 +1,8 @@
-using Avalonia;
-using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Data.Core;
-using Avalonia.Data.Core.Plugins;
 using System.Linq;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
 using MinecraftWerewolf.Utilities;
 using MinecraftWerewolf.ViewModels;
@@ -24,20 +24,14 @@ public partial class App : Application
             // Avoid duplicate validations from both Avalonia and the CommunityToolkit. 
             // More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
             DisableAvaloniaDataAnnotationValidation();
-            desktop.MainWindow = new MainWindow();
-            desktop.MainWindow.DataContext = new MainViewModel(((MainWindow) desktop.MainWindow).MainView);
+            desktop.MainWindow = new MainWindow() { DataContext = new MainViewModel() };
         }
         else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
         {
-            singleViewPlatform.MainView = new MainView();
-            singleViewPlatform.MainView.DataContext = new MainViewModel((MainView) singleViewPlatform.MainView);
+            singleViewPlatform.MainView = new MainView { DataContext = new MainViewModel() };
         }
 
         base.OnFrameworkInitializationCompleted();
-        
-        // Set the theme to Minecraft
-        var theme = MinecraftTheme.Minecraft;
-        Application.Current!.RequestedThemeVariant = theme;
     }
 
     private void DisableAvaloniaDataAnnotationValidation()

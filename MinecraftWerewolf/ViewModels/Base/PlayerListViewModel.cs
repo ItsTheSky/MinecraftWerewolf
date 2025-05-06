@@ -28,6 +28,7 @@ public enum PlayerListType
 {
     All,
     OnlyAlive,
+    OnlyPartialAlive,
     OnlyDead,
     OnlyDying
 }
@@ -68,6 +69,7 @@ public partial class InternalGamePlayer : ObservableObject
             {
                 case PlayerListType.OnlyAlive when !Base.IsAlive:
                 case PlayerListType.OnlyDead when Base.IsAlive:
+                case PlayerListType.OnlyPartialAlive when Base.ShouldDie:
                 case PlayerListType.OnlyDying when !Base.ShouldDie:
                     return false;
                 

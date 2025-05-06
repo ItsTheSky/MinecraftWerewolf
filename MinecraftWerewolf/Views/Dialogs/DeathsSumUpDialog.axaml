@@ -5,15 +5,16 @@
              xmlns:avalonia="clr-namespace:SpacedGridControl.Avalonia;assembly=SpacedGridControl.Avalonia"
              xmlns:dialogs="clr-namespace:MinecraftWerewolf.ViewModels.Dialogs"
              xmlns:iconPacks="https://github.com/MahApps/IconPacks.Avalonia"
+             xmlns:popOvers="clr-namespace:MinecraftWerewolf.ViewModels.PopOvers"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:DataType="dialogs:DeathsSumUpViewModel"
+             x:DataType="popOvers:DeathsSumUpViewModel"
              x:Class="MinecraftWerewolf.Views.Dialogs.DeathsSumUpDialog">
     <StackPanel Orientation="Vertical" Spacing="5" 
                 HorizontalAlignment="Stretch">
         
         <ItemsControl ItemsSource="{Binding DeadPlayers}">
             <ItemsControl.ItemTemplate>
-                <DataTemplate x:DataType="dialogs:InternalGamePlayer">
+                <DataTemplate x:DataType="popOvers:InternalGamePlayer">
                     <StackPanel Orientation="Horizontal" Spacing="4" Margin="20,0,0,0">
                         <iconPacks:PackIconLucide Kind="Skull"
                                                   Width="15" Height="15" VerticalAlignment="Center"/>

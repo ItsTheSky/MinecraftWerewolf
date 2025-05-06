@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
+using MinecraftWerewolf.Core.Cards;
 using MinecraftWerewolf.Core.Models;
-using MinecraftWerewolf.ViewModels.Dialogs;
 using MinecraftWerewolf.Views.Dialogs;
 using Ursa.Controls;
+using DeathsSumUpViewModel = MinecraftWerewolf.ViewModels.PopOvers.DeathsSumUpViewModel;
 
 namespace MinecraftWerewolf.Core;
 
@@ -52,8 +53,7 @@ public partial class WerewolfGame : ObservableObject
             player.IsAlive = true;
             player.IsProtected = false;
             player.ShouldDie = false;
-            // player.Love = null;
-            // TODO: add love
+            player.Love = null;
         }
 
         CurrentNightIndex = 1;
@@ -68,7 +68,7 @@ public partial class WerewolfGame : ObservableObject
         NightCards.Clear();
 
         // first, gather all different cards
-        var cards = new List<GameCard>();
+        var cards = new List<GameCard>() { new Healer() };
         foreach (var player in Players)
         {
             if (player.Card is not null && !cards.Contains(player.Card) && player.IsAlive)
@@ -128,13 +128,13 @@ public partial class WerewolfGame : ObservableObject
                 killedPlayers.AddRange(player.Die());
             }
         }
-        await Dialog.ShowModal<DeathsSumUpDialog, DeathsSumUpViewModel>(new DeathsSumUpViewModel(killedPlayers), options: new DialogOptions()
+        await OverlayDialog.ShowModal<DeathsSumUpDialog, DeathsSumUpViewModel>(new DeathsSumUpViewModel(killedPlayers), "LocalHost", options: new OverlayDialogOptions()
         {
             Mode = DialogMode.Info,
-            StartupLocation = WindowStartupLocation.CenterScreen,
             IsCloseButtonVisible = false,
             CanResize = false,
             Title = "Résumé des Morts",
+            Buttons = DialogButton.OK
         });
 
         SetupDay();

@@ -11,7 +11,7 @@ namespace MinecraftWerewolf.Core.Cards;
 
 public class Endermite : GameCard
 {
-    public override int Order => 40;
+    public override int Order => 30;
     public override string Id => "endermite";
     public override string DisplayName => "Endermite";
     public override string Description => "Peut choisir de \"dormir\" chez quelqu'un; l'endermite sera alors protégé si elle se fait attaquer.";

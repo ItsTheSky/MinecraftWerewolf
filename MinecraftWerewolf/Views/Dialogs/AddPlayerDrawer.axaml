@@ -1,0 +1,44 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:popOvers="clr-namespace:MinecraftWerewolf.ViewModels.PopOvers"
+             xmlns:u="https://irihi.tech/ursa"
+             xmlns:models="clr-namespace:MinecraftWerewolf.Core.Models"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="popOvers:AddPlayerViewModel"
+             x:Class="MinecraftWerewolf.Views.Dialogs.AddPlayerDrawer">
+
+    <u:Form LabelPosition="Top" LabelWidth="*" HorizontalAlignment="Stretch">
+        <TextBox u:FormItem.Label="Nom du joueur" u:FormItem.IsRequired="True"
+                 Text="{Binding Name}" />
+
+        <u:FormItem Label="Rôle/Carte" IsRequired="True">
+            <ComboBox HorizontalAlignment="Stretch"
+                      ItemsSource="{Binding AvailableCards}"
+                      PlaceholderText="Sélectionner une carte"
+                      SelectedItem="{Binding Card}">
+                
+                <ComboBox.SelectionBoxItemTemplate>
+                    <DataTemplate x:DataType="models:GameCard">
+                        <StackPanel Orientation="Horizontal" Spacing="5">
+                            <Image Source="{Binding Image}" Width="20" Height="20" />
+                            <TextBlock VerticalAlignment="Center" Text="{Binding DisplayName}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.SelectionBoxItemTemplate>
+                
+                <ComboBox.ItemTemplate>
+                    <DataTemplate x:DataType="models:GameCard">
+                        <StackPanel Orientation="Horizontal" Spacing="5">
+                            <Image Source="{Binding Image}" Width="20" Height="20" />
+                            <TextBlock VerticalAlignment="Center" Text="{Binding DisplayName}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+                
+            </ComboBox>
+        </u:FormItem>
+    </u:Form>
+
+</UserControl>

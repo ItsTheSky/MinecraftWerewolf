@@ -14,6 +14,8 @@ public partial class BeeViewModel : BasePlayerSelectViewModel
     {
         this.game = game;
         base.PlayerSelectCommand = PlayerSelectCommand;
+
+        AllowSelf = true;
     }
 
     [ObservableProperty] private bool _isProtect = true;
