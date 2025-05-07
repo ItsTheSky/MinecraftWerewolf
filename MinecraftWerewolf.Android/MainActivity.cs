@@ -7,7 +7,7 @@ using Avalonia.Android;
 namespace MinecraftWerewolf.Android;
 
 [Activity(
-    Label = "MinecraftWerewolf.Android",
+    Label = "Minecraft Werewolf",
     Theme = "@style/MyTheme.NoActionBar",
     Icon = "@drawable/icon",
     MainLauncher = true,

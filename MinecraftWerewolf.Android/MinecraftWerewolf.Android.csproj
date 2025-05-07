@@ -38,4 +38,9 @@
     <ItemGroup>
         <ProjectReference Include="..\MinecraftWerewolf\MinecraftWerewolf.csproj"/>
     </ItemGroup>
+
+    <ItemGroup>
+      <AvaloniaResource Include="icon.png" />
+      <AvaloniaResource Include="Icon.png" />
+    </ItemGroup>
 </Project>
