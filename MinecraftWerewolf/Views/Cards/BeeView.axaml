@@ -27,7 +27,7 @@
             </StackPanel>
         </ToggleButton>
         
-        <ToggleButton Grid.Row="1" Grid.Column="1"
+        <ToggleButton Grid.Row="1" Grid.Column="1" Classes="Warning"
                       IsChecked="{Binding !IsProtect}" HorizontalAlignment="Stretch">
             <StackPanel Spacing="5" HorizontalAlignment="Center" Orientation="Horizontal">
                 <iconPacks:PackIconLucide Kind="ThumbsDown"

@@ -10,10 +10,12 @@ public partial class SpiderViewModel : BasePlayerSelectViewModel
 {
     private WerewolfGame game;
     
-    public SpiderViewModel(WerewolfGame game, GameCard source) : base(game, source)
+    public SpiderViewModel(WerewolfGame game, GameCard source) : base(game, source,
+        PlayerListType.OnlyAlive)
     {
         this.game = game;
         base.PlayerSelectCommand = PlayerSelectCommand;
+        AllowSelf = false;
     }
 
     [RelayCommand]

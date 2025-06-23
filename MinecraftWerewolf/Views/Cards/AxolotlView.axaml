@@ -12,15 +12,14 @@
              x:DataType="cards:AxolotlViewModel"
              x:Class="MinecraftWerewolf.Views.Cards.AxolotlView">
     
-    <avalonia:SpacedGrid RowDefinitions="Auto,*,Auto,Auto" RowSpacing="5"
-                         ColumnDefinitions="*,Auto,*" ColumnSpacing="5">
+    <avalonia:SpacedGrid RowDefinitions="Auto,Auto,Auto,*,Auto,Auto" RowSpacing="5">
 
-        <u:Banner Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" 
+        <u:Banner Grid.Row="0" 
                   Type="Information" Classes="Bordered" CanClose="False">
             L'axolotl fait tomber amoureux deux joueurs de son choix.
         </u:Banner>
         
-        <ComboBox Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Players}" VerticalAlignment="Center"
+        <ComboBox Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Players}"
                   PlaceholderText="Sélectionner un joueur"
                   SelectedValue="{Binding FirstPlayerValue}" HorizontalAlignment="Stretch">
             <ComboBox.SelectionBoxItemTemplate>
@@ -37,10 +36,10 @@
         </ComboBox>
         
         <iconPacks:PackIconLucide Kind="Heart" Foreground="HotPink"
-                                  Width="24" Height="24" VerticalAlignment="Center"
-                                  Grid.Row="1" Grid.Column="1" />
+                                  Width="36" Height="36" HorizontalAlignment="Center"
+                                  Grid.Row="2" />
         
-        <ComboBox Grid.Row="1" Grid.Column="2" ItemsSource="{Binding Players}" VerticalAlignment="Center"
+        <ComboBox Grid.Row="3" ItemsSource="{Binding Players}"
                   PlaceholderText="Sélectionner un joueur"
                   SelectedValue="{Binding SecondPlayerValue}" HorizontalAlignment="Stretch">
             <ComboBox.SelectionBoxItemTemplate>
@@ -56,13 +55,13 @@
             </ComboBox.ItemTemplate>
         </ComboBox>
         
-        <u:Banner Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3"
+        <u:Banner Grid.Row="4"
                   IsVisible="{Binding SameSelectedPlayers}"
                   Type="Error" HorizontalAlignment="Stretch" Classes="Bordered">
             Les deux joueurs doivent être différents.
         </u:Banner>
         
-        <Button Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3"
+        <Button Grid.Row="5"
                 HorizontalAlignment="Stretch" Classes="Success"
                 Theme="{DynamicResource SolidButton}"
                 Command="{Binding ValidateCommand}"

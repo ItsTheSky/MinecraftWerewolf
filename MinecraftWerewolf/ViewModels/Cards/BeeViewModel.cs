@@ -10,12 +10,14 @@ public partial class BeeViewModel : BasePlayerSelectViewModel
 {
     private WerewolfGame game;
 
-    public BeeViewModel(WerewolfGame game, GameCard source) : base(game, source)
+    public BeeViewModel(WerewolfGame game, GameCard source) : base(game, source,
+        PlayerListType.OnlyAlive)
     {
         this.game = game;
         base.PlayerSelectCommand = PlayerSelectCommand;
 
         AllowSelf = true;
+        AllowNoSelection = true;
     }
 
     [ObservableProperty] private bool _isProtect = true;

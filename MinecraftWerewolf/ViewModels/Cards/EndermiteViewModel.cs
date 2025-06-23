@@ -11,7 +11,8 @@ public partial class EndermiteViewModel : BasePlayerSelectViewModel
 {
     private WerewolfGame game;
     
-    public EndermiteViewModel(WerewolfGame game, GameCard source) : base(game, source)
+    public EndermiteViewModel(WerewolfGame game, GameCard source) : base(game, source,
+        PlayerListType.OnlyAlive)
     {
         this.game = game;
         base.PlayerSelectCommand = PlayerSelectCommand;

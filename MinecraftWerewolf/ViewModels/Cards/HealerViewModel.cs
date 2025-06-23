@@ -9,11 +9,11 @@ public partial class HealerViewModel : BasePlayerSelectViewModel
 {
     private WerewolfGame game;
     
-    public HealerViewModel(WerewolfGame game, GameCard source) : base(game, source)
+    public HealerViewModel(WerewolfGame game, GameCard source) : base(game, source,
+        PlayerListType.OnlyDying)
     {
         this.game = game;
         
-        ListType = PlayerListType.OnlyDying;
         AllowSelf = true;
         AllowNoSelection = true;
         

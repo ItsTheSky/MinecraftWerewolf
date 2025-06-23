@@ -10,7 +10,8 @@ public partial class BlazeViewModel : BasePlayerSelectViewModel
 {
     private WerewolfGame game;
     
-    public BlazeViewModel(WerewolfGame game, GameCard source) : base(game, source)
+    public BlazeViewModel(WerewolfGame game, GameCard source) : base(game, source,
+        PlayerListType.OnlyAlive)
     {
         this.game = game;
         base.PlayerSelectCommand = PlayerSelectCommand;

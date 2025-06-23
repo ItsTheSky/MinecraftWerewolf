@@ -10,13 +10,13 @@ public partial class EndermanViewModel : BasePlayerSelectViewModel
 {
     private WerewolfGame game;
     
-    public EndermanViewModel(WerewolfGame game, GameCard source) : base(game, source)
+    public EndermanViewModel(WerewolfGame game, GameCard source) : base(game, source,
+        PlayerListType.OnlyAlive)
     {
         this.game = game;
         base.PlayerSelectCommand = PlayerSelectCommand;
 
         AllowSelf = true;
-        ListType = PlayerListType.OnlyAlive;
     }
 
     [RelayCommand]

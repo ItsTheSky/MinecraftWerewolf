@@ -11,11 +11,12 @@ public partial class AllayViewModel : BasePlayerSelectViewModel
 {
     private WerewolfGame game;
     
-    public AllayViewModel(WerewolfGame game, GameCard source) : base(game, source)
+    public AllayViewModel(WerewolfGame game, GameCard source) : base(game, source, PlayerListType.All)
     {
         this.game = game;
         base.PlayerSelectCommand = PlayerSelectCommand;
-        
+        AllowSelf = true;
+  
         // Check which potions have been used
         HasUsedHealPotion = game.GameData.ContainsKey(Allay.HasUsedHealPotionKey);
         HasUsedDeathPotion = game.GameData.ContainsKey(Allay.HasUsedDeathPotionKey);
@@ -52,13 +53,13 @@ public partial class AllayViewModel : BasePlayerSelectViewModel
         {
             ShowHealOption = true;
             ShowDeathOption = false;
-            ListType = PlayerListType.OnlyDying;
+            Filter = PlayerListType.OnlyDying;
         }
         else if (!HasUsedDeathPotion)
         {
             ShowDeathOption = true;
             ShowHealOption = false;
-            ListType = PlayerListType.OnlyPartialAlive;
+            Filter = PlayerListType.OnlyPartialAlive;
         }
         else
         {
@@ -101,7 +102,7 @@ public partial class AllayViewModel : BasePlayerSelectViewModel
     {
         ShowHealOption = true;
         ShowDeathOption = false;
-        ListType = PlayerListType.OnlyDying;
+        Filter = PlayerListType.OnlyDying;
     }
     
     [RelayCommand]
@@ -109,6 +110,6 @@ public partial class AllayViewModel : BasePlayerSelectViewModel
     {
         ShowDeathOption = true;
         ShowHealOption = false;
-        ListType = PlayerListType.OnlyPartialAlive;
+        Filter = PlayerListType.OnlyPartialAlive;
     }
 }

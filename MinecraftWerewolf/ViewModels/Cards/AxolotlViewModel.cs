@@ -15,7 +15,8 @@ public partial class AxolotlViewModel : PlayerListViewModel
 {
     private WerewolfGame game;
     
-    public AxolotlViewModel(WerewolfGame game, GameCard source) : base(game.Players, source)
+    public AxolotlViewModel(WerewolfGame game, GameCard source) : base(game.Players, source,
+        PlayerListType.OnlyAlive)
     {
         this.game = game;
 
