@@ -4,6 +4,8 @@
         <OutputType>Exe</OutputType>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <Nullable>enable</Nullable>
+        <PublishProfile>wasm</PublishProfile>
+        <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     </PropertyGroup>
 
     <ItemGroup>
@@ -17,5 +19,9 @@
         <PackageReference Include="Irihi.Ursa.Themes.Semi" />
         <PackageReference Include="Semi.Avalonia" />
         <PackageReference Include="SpacedGrid-Avalonia" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <AvaloniaResource Include="wwwroot\icon.png" />
     </ItemGroup>
 </Project>

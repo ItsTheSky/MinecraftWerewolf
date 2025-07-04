@@ -16,49 +16,41 @@
         
         <TextBlock Grid.Row="0" FontSize="26" Text="Configuration des Cartes" FontWeight="SemiBold" TextAlignment="Center" />
         
-        <!-- Total players and status -->
-        <u:Banner Grid.Row="1" Type="Information" Classes="Bordered" CanClose="False">
+        <!-- Target player count and auto-distribution -->
+        <u:Banner Grid.Row="1" Type="Warning" Classes="Bordered" CanClose="False">
+            <avalonia:SpacedGrid ColumnDefinitions="Auto,*,Auto,Auto" ColumnSpacing="10">
+                <TextBlock Grid.Column="0" Text="Joueurs:" FontWeight="SemiBold" VerticalAlignment="Center" />
+                
+                <NumericUpDown Grid.Column="1" 
+                               Value="{Binding TargetPlayerCount}"
+                               Minimum="4" Maximum="20" 
+                               HorizontalAlignment="Left"
+                               Width="100"
+                               FormatString="N0"
+                               VerticalAlignment="Center" />
+                
+                <Button Grid.Column="2" Command="{Binding RedistributeCardsCommand}"
+                        Classes="Primary" Padding="5,2"
+                        ToolTip.Tip="Redistribuer automatiquement les cartes">
+                    <StackPanel Orientation="Horizontal" Spacing="5">
+                        <iconPacks:PackIconLucide Kind="Shuffle" Width="14" Height="14" />
+                        <TextBlock Text="Auto" FontSize="12" />
+                    </StackPanel>
+                </Button>
+                
+                <TextBlock Grid.Column="3" Text="{Binding TotalPlayers, StringFormat='(Actuel: {0})'}" 
+                           FontWeight="SemiBold" VerticalAlignment="Center" Opacity="0.8" />
+            </avalonia:SpacedGrid>
+        </u:Banner>
+        
+        <!-- Total players status -->
+        <u:Banner Grid.Row="2" Type="Information" Classes="Bordered" CanClose="False">
             <StackPanel Orientation="Horizontal" Spacing="10">
                 <iconPacks:PackIconLucide Kind="Users" Width="16" Height="16" />
                 <TextBlock Text="{Binding TotalPlayers, StringFormat='Total: {0} joueurs'}" FontWeight="SemiBold" />
                 <TextBlock Text="(Minimum: 4 joueurs)" FontSize="12" Opacity="0.7" />
             </StackPanel>
         </u:Banner>
-        
-        <!-- Preset buttons -->
-        <avalonia:SpacedGrid Grid.Row="2" ColumnDefinitions="*,*,*,*" ColumnSpacing="5">
-            <Button Grid.Column="0" Command="{Binding SetPresetCommand}" CommandParameter="small"
-                    Classes="Secondary" HorizontalAlignment="Stretch">
-                <StackPanel Spacing="2">
-                    <TextBlock Text="Petit" FontWeight="SemiBold" />
-                    <TextBlock Text="4-6 joueurs" FontSize="10" Opacity="0.7" />
-                </StackPanel>
-            </Button>
-            
-            <Button Grid.Column="1" Command="{Binding SetPresetCommand}" CommandParameter="medium"
-                    Classes="Secondary" HorizontalAlignment="Stretch">
-                <StackPanel Spacing="2">
-                    <TextBlock Text="Moyen" FontWeight="SemiBold" />
-                    <TextBlock Text="7-10 joueurs" FontSize="10" Opacity="0.7" />
-                </StackPanel>
-            </Button>
-            
-            <Button Grid.Column="2" Command="{Binding SetPresetCommand}" CommandParameter="large"
-                    Classes="Secondary" HorizontalAlignment="Stretch">
-                <StackPanel Spacing="2">
-                    <TextBlock Text="Grand" FontWeight="SemiBold" />
-                    <TextBlock Text="11+ joueurs" FontSize="10" Opacity="0.7" />
-                </StackPanel>
-            </Button>
-            
-            <Button Grid.Column="3" Command="{Binding ResetQuantitiesCommand}"
-                    Classes="Warning" HorizontalAlignment="Stretch">
-                <StackPanel Spacing="2">
-                    <iconPacks:PackIconLucide Kind="RotateCcw" Width="16" Height="16" />
-                    <TextBlock Text="Reset" FontSize="10" />
-                </StackPanel>
-            </Button>
-        </avalonia:SpacedGrid>
         
         <!-- Card quantities list -->
         <ScrollViewer Grid.Row="3" HorizontalAlignment="Stretch" VerticalScrollBarVisibility="Visible">
