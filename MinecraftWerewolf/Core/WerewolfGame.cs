@@ -159,7 +159,7 @@ public partial class WerewolfGame : ObservableObject
             // Then apply all deaths at once
             foreach (var player in playersToKill)
             {
-                killedPlayers.AddRange(player.Die());
+                killedPlayers.AddRange(await player.Die(this));
             }
 
             await OverlayDialog.ShowModal<DeathsSumUpDialog, DeathsSumUpViewModel>(

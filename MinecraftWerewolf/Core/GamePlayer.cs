@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using MinecraftWerewolf.Core.Models;
+using MinecraftWerewolf.ViewModels.PopOvers;
+using MinecraftWerewolf.Views.Dialogs;
+using Ursa.Controls;
 
 namespace MinecraftWerewolf.Core;
 
@@ -25,8 +29,6 @@ public partial class GamePlayer : ObservableObject
     [ObservableProperty] private bool _isParalyzed;
     
     [ObservableProperty] private bool _isCharged;
-    [ObservableProperty] private GamePlayer? _leftPlayer;
-    [ObservableProperty] private GamePlayer? _rightPlayer;
     
     [ObservableProperty] private DeathSource? _lastDeathSource;
 
@@ -63,7 +65,7 @@ public partial class GamePlayer : ObservableObject
         SleepingEndermite = null;
     }
 
-    public List<PlayerDeath> Die(DeathSource? forceSource = null, int level = 0)
+    public async Task<List<PlayerDeath>> Die(WerewolfGame game, DeathSource? forceSource = null, int level = 0)
     {
         var source = (forceSource ?? LastDeathSource)!.Value;
 
@@ -75,21 +77,35 @@ public partial class GamePlayer : ObservableObject
         if (Love != null)
         {
             Love.Love = null; // avoid circular references
-            deadPlayers.AddRange(Love.Die(DeathSource.Love, level + 1));
+            deadPlayers.AddRange(await Love.Die(game, DeathSource.Love, level + 1));
             Love.Love = this; // restore love
         }
 
         if (SleepingEndermite != null && !IsProtected)
         {
-            deadPlayers.AddRange(SleepingEndermite.Die(DeathSource.Endermite, level + 1));
+            deadPlayers.AddRange(await SleepingEndermite.Die(game, DeathSource.Endermite, level + 1));
         }
 
         if (Card!.Id == "creeper" && IsCharged)
         {
-            if (LeftPlayer != null)
-                deadPlayers.AddRange(LeftPlayer.Die(DeathSource.Creeper, level + 1));
-            if (RightPlayer != null)
-                deadPlayers.AddRange(RightPlayer.Die(DeathSource.Creeper, level + 1));
+            // we now ask the user to choose the 2 players aroudn the creeper
+            // LeftPlayer.Die(DeathSource.Creeper, level + 1)
+
+            var vm = new ChargedCreeperSelectorViewModel(game);
+            await OverlayDialog.ShowModal<ChargedCreeperSelectorDialog, ChargedCreeperSelectorViewModel>(
+                vm, "LocalHost", options: new OverlayDialogOptions()
+                {
+                    Mode = DialogMode.Info,
+                    IsCloseButtonVisible = false,
+                    CanResize = false,
+                    Title = "Choix des Morts",
+                    Buttons = DialogButton.OK
+                });
+
+            if (vm.LeftPlayer != null)
+                deadPlayers.AddRange(await vm.LeftPlayer.Base.Die(game, DeathSource.Creeper, level + 1));
+            if (vm.RightPlayer != null)
+                deadPlayers.AddRange(await vm.RightPlayer.Base.Die(game, DeathSource.Creeper, level + 1));
         }
         
         ActuallyDie();

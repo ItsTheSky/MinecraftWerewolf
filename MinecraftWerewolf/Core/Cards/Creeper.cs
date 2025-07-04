@@ -13,7 +13,7 @@ public class Creeper : GameCard
     public override string DisplayName => "Creeper";
 
     public override string Description =>
-        "Trop compliquer à expliquer comme ça, mais c'est vraiment plus simple que ce que l'on pense!";
+        "";
     public override Color Color => Colors.Green;
     public override List<CardTeam> Teams => [CardTeam.Monster];
 

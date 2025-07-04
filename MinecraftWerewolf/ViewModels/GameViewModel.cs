@@ -30,21 +30,10 @@ public partial class GameViewModel : ObservableObject
         
         CurrentGame = new WerewolfGame();
 
-        var dict = new Dictionary<PreGamePlayer, GamePlayer>();
         foreach (var player in players)
         {
             var gamePlayer = new GamePlayer(player.Name, player.Card);
-            dict.Add(player, gamePlayer);
             CurrentGame.Players.Add(gamePlayer);
-        }
-        
-        // Define left/right players
-        foreach (var player in players)
-        {
-            var gamePlayer = dict[player];
-            
-            gamePlayer.LeftPlayer = CurrentGame.Players.FirstOrDefault(p => p.Name == player.Left!.Name);
-            gamePlayer.RightPlayer = CurrentGame.Players.FirstOrDefault(p => p.Name == player.Right!.Name);
         }
         
         CurrentGame.StartGame();
@@ -117,7 +106,7 @@ public partial class GameViewModel : ObservableObject
         if (SelectedPlayer == null)
             throw new InvalidOperationException("Please select a player before voting.");
 
-        var killedPlayers = SelectedPlayer.Die(DeathSource.DayVote);
+        var killedPlayers = await SelectedPlayer.Die(CurrentGame, DeathSource.DayVote);
         
         await OverlayDialog.ShowModal<DeathsSumUpDialog, DeathsSumUpViewModel>(new DeathsSumUpViewModel(killedPlayers), "LocalHost", options: new OverlayDialogOptions()
         {
