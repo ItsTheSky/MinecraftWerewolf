@@ -1,0 +1,51 @@
+name: Deploy Avalonia Browser App
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+    
+    - name: Install WASM workload
+      run: dotnet workload install wasm-tools
+      # ou essayez: dotnet workload install microsoft.net.workload.mono.toolchain.net8
+    
+    - name: Restore dependencies for browser project only
+      run: dotnet restore MinecraftWerewolf.Browser/MinecraftWerewolf.Browser.csproj
+    
+    - name: Build browser project
+      run: dotnet publish MinecraftWerewolf.Browser/MinecraftWerewolf.Browser.csproj -c Release -o ./dist
+    
+    - name: Setup Pages
+      uses: actions/configure-pages@v4
+    
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: './dist/wwwroot'
+    
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4
