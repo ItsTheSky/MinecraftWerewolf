@@ -26,10 +26,11 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: '8.0.x'  # Utilisez 8.0.x plutôt que la version spécifique
+        dotnet-version: '8.0.x'
     
     - name: Install WASM workload
-      run: dotnet workload install wasm-tools-net8
+      run: dotnet workload install wasm-tools
+      # ou essayez: dotnet workload install microsoft.net.workload.mono.toolchain.net8
     
     - name: Restore dependencies for browser project only
       run: dotnet restore MinecraftWerewolf.Browser/MinecraftWerewolf.Browser.csproj
@@ -43,7 +44,7 @@ jobs:
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v3
       with:
-        path: './dist/wwwroot'  # Le dossier de sortie sera dans ./dist/wwwroot
+        path: './dist/wwwroot'
     
     - name: Deploy to GitHub Pages
       id: deployment
