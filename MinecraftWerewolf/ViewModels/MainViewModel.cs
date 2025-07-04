@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -14,37 +14,8 @@ public partial class MainViewModel : ViewModelBase
     {
         SetupViewModel = new SetupViewModel(this);
 
-        const int samplePlayers = 15;
-        var usedCards = new HashSet<GameCard>();
-        for (var i = 0; i < samplePlayers; i++)
-        {
-            var card = CardProvider.AllCards[i % CardProvider.AllCards.Count];
-            while (!card.AllowMultiple && usedCards.Contains(card))
-            {
-                i++;
-                
-                card = CardProvider.AllCards[i % CardProvider.AllCards.Count];
-            }
-            
-            usedCards.Add(card);
-            var index = SetupViewModel.Players.Count;
-            SetupViewModel.Players.Add(new PreGamePlayer()
-            {
-                Name = $"Player {index + 1}",
-                Card = card
-            });
-        }
-        
-        // now, link all left/right players of players randomly
-        for (var i = 0; i < SetupViewModel.Players.Count; i++)
-        {
-            var player = SetupViewModel.Players[i];
-            var leftIndex = (i - 1 + SetupViewModel.Players.Count) % SetupViewModel.Players.Count;
-            var rightIndex = (i + 1) % SetupViewModel.Players.Count;
-            
-            player.Left = SetupViewModel.Players[leftIndex];
-            player.Right = SetupViewModel.Players[rightIndex];
-        }
+        // Initialize with a sample configuration for testing
+        SetupViewModel.ApplyPreset("medium");
     }
     
     [ObservableProperty] private GameViewModel _gameViewModel;
@@ -55,7 +26,13 @@ public partial class MainViewModel : ViewModelBase
     [RelayCommand]
     public void StartGame()
     {
-        GameViewModel = new GameViewModel(SetupViewModel.Players.ToList(), this);
+        // This method is kept for backward compatibility, but now delegates to SetupViewModel
+        SetupViewModel.StartGame();
+    }
+    
+    public void StartGameWithPlayers(List<PreGamePlayer> players)
+    {
+        GameViewModel = new GameViewModel(players, this);
         IsInSetup = false;
     }
     

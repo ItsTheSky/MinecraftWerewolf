@@ -7,54 +7,136 @@
              xmlns:models="clr-namespace:MinecraftWerewolf.Core.Models"
              xmlns:styles="clr-namespace:MinecraftWerewolf.Styles"
              xmlns:iconPacks="https://github.com/MahApps/IconPacks.Avalonia"
-             xmlns:views="clr-namespace:MinecraftWerewolf.Views"
+             xmlns:u="https://irihi.tech/ursa"
+             xmlns:converters="clr-namespace:MinecraftWerewolf.Utilities.Converters"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="viewModels:SetupViewModel"
              x:Class="MinecraftWerewolf.Views.SetupView">
-    <avalonia:SpacedGrid RowDefinitions="Auto,*,Auto,Auto" RowSpacing="10">
+    <avalonia:SpacedGrid RowDefinitions="Auto,Auto,Auto,*,Auto" RowSpacing="10">
         
-        <TextBlock Grid.Row="0" FontSize="26" Text="Mise en Place" FontWeight="SemiBold" TextAlignment="Center" />
+        <TextBlock Grid.Row="0" FontSize="26" Text="Configuration des Cartes" FontWeight="SemiBold" TextAlignment="Center" />
         
-        <ScrollViewer Grid.Row="1" HorizontalAlignment="Stretch" VerticalScrollBarVisibility="Visible">
-            <ItemsControl HorizontalAlignment="Stretch" ItemsSource="{Binding Players}">
+        <!-- Total players and status -->
+        <u:Banner Grid.Row="1" Type="Information" Classes="Bordered" CanClose="False">
+            <StackPanel Orientation="Horizontal" Spacing="10">
+                <iconPacks:PackIconLucide Kind="Users" Width="16" Height="16" />
+                <TextBlock Text="{Binding TotalPlayers, StringFormat='Total: {0} joueurs'}" FontWeight="SemiBold" />
+                <TextBlock Text="(Minimum: 4 joueurs)" FontSize="12" Opacity="0.7" />
+            </StackPanel>
+        </u:Banner>
+        
+        <!-- Preset buttons -->
+        <avalonia:SpacedGrid Grid.Row="2" ColumnDefinitions="*,*,*,*" ColumnSpacing="5">
+            <Button Grid.Column="0" Command="{Binding SetPresetCommand}" CommandParameter="small"
+                    Classes="Secondary" HorizontalAlignment="Stretch">
+                <StackPanel Spacing="2">
+                    <TextBlock Text="Petit" FontWeight="SemiBold" />
+                    <TextBlock Text="4-6 joueurs" FontSize="10" Opacity="0.7" />
+                </StackPanel>
+            </Button>
+            
+            <Button Grid.Column="1" Command="{Binding SetPresetCommand}" CommandParameter="medium"
+                    Classes="Secondary" HorizontalAlignment="Stretch">
+                <StackPanel Spacing="2">
+                    <TextBlock Text="Moyen" FontWeight="SemiBold" />
+                    <TextBlock Text="7-10 joueurs" FontSize="10" Opacity="0.7" />
+                </StackPanel>
+            </Button>
+            
+            <Button Grid.Column="2" Command="{Binding SetPresetCommand}" CommandParameter="large"
+                    Classes="Secondary" HorizontalAlignment="Stretch">
+                <StackPanel Spacing="2">
+                    <TextBlock Text="Grand" FontWeight="SemiBold" />
+                    <TextBlock Text="11+ joueurs" FontSize="10" Opacity="0.7" />
+                </StackPanel>
+            </Button>
+            
+            <Button Grid.Column="3" Command="{Binding ResetQuantitiesCommand}"
+                    Classes="Warning" HorizontalAlignment="Stretch">
+                <StackPanel Spacing="2">
+                    <iconPacks:PackIconLucide Kind="RotateCcw" Width="16" Height="16" />
+                    <TextBlock Text="Reset" FontSize="10" />
+                </StackPanel>
+            </Button>
+        </avalonia:SpacedGrid>
+        
+        <!-- Card quantities list -->
+        <ScrollViewer Grid.Row="3" HorizontalAlignment="Stretch" VerticalScrollBarVisibility="Visible">
+            <ItemsControl HorizontalAlignment="Stretch" ItemsSource="{Binding CardQuantities}">
                 
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <StackPanel Spacing="10" Orientation="Vertical" />
+                        <StackPanel Spacing="8" Orientation="Vertical" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 
                 <ItemsControl.ItemTemplate>
-                    <DataTemplate x:DataType="models:PreGamePlayer">
+                    <DataTemplate x:DataType="models:CardQuantity">
                         <styles:Card>
-                            <avalonia:SpacedGrid ColumnDefinitions="Auto,*,Auto,Auto" ColumnSpacing="10"
-                                                 RowDefinitions="*,*" RowSpacing="0">
+                            <avalonia:SpacedGrid ColumnDefinitions="Auto,*,Auto,Auto,Auto,Auto" ColumnSpacing="10"
+                                                 RowDefinitions="*,Auto" RowSpacing="2">
                                 
+                                <!-- Card image -->
                                 <Image Grid.Column="0" Grid.Row="0" Grid.RowSpan="2"
                                        RenderOptions.BitmapInterpolationMode="None"
                                        Source="{Binding Card.Image}" Width="40" Height="40" />
                                 
-                                <TextBlock Grid.Row="0" Grid.Column="1" FontWeight="SemiBold" FontSize="20"
+                                <!-- Card name -->
+                                <TextBlock Grid.Row="0" Grid.Column="1" FontWeight="SemiBold" FontSize="18"
                                            VerticalAlignment="Bottom" HorizontalAlignment="Left"
-                                           Margin="10,0,0,-5"
-                                           Text="{Binding Name}" />
-                                
-                                <TextBlock Grid.Row="1" Grid.Column="1" FontWeight="Light" FontSize="18"
-                                           Margin="10,-5,2,0" FontStyle="Italic"
-                                           VerticalAlignment="Top" HorizontalAlignment="Stretch"
                                            Text="{Binding Card.DisplayName}" />
                                 
-                                <Button Grid.Row="0" Grid.RowSpan="2" Grid.Column="2" Padding="10" Classes="Success"
-                                        Command="{Binding $parent[views:SetupView].((viewModels:SetupViewModel)DataContext).EditPlayerCommand}"
-                                        CommandParameter="{Binding .}">
-                                    <iconPacks:PackIconLucide Kind="PencilRuler" Width="20" Height="20" />
+                                <!-- Card description and multiple info -->
+                                <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Vertical" Spacing="2">
+                                    <TextBlock FontWeight="Light" FontSize="12"
+                                               Opacity="0.7" TextWrapping="Wrap"
+                                               VerticalAlignment="Top" HorizontalAlignment="Stretch"
+                                               Text="{Binding Card.Description}" />
+                                    
+                                    <TextBlock FontSize="10" FontStyle="Italic" Opacity="0.6"
+                                               IsVisible="{Binding !Card.AllowMultiple}">
+                                        ⚠️ Une seule instance autorisée
+                                    </TextBlock>
+                                    
+                                    <TextBlock FontSize="10" FontStyle="Italic" Opacity="0.6"
+                                               IsVisible="{Binding Card.AllowMultiple}">
+                                        ✅ Instances multiples autorisées
+                                    </TextBlock>
+                                </StackPanel>
+                                
+                                <!-- Quantity display -->
+                                <Border Grid.Row="0" Grid.RowSpan="2" Grid.Column="2" 
+                                        Background="{DynamicResource ThemeControlMidBrush}"
+                                        CornerRadius="15" Padding="8,4" VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding Quantity}" FontWeight="Bold" FontSize="16" 
+                                               HorizontalAlignment="Center" MinWidth="20" TextAlignment="Center" />
+                                </Border>
+                                
+                                <!-- Decrease button -->
+                                <Button Grid.Row="0" Grid.RowSpan="2" Grid.Column="3" 
+                                        Width="35" Height="35" Padding="0"
+                                        Classes="Danger"
+                                        Command="{Binding $parent[ItemsControl].((viewModels:SetupViewModel)DataContext).DecreaseQuantityCommand}"
+                                        CommandParameter="{Binding .}"
+                                        IsEnabled="{Binding Quantity, Converter={x:Static converters:CommonConverters.IsGreaterThan}, ConverterParameter=0}">
+                                    <iconPacks:PackIconLucide Kind="Minus" Width="18" Height="18" />
                                 </Button>
                                 
-                                <Button Grid.Row="0" Grid.RowSpan="2" Grid.Column="3" Padding="10" Classes="Danger"
-                                        Command="{Binding $parent[views:SetupView].((viewModels:SetupViewModel)DataContext).RemovePlayerCommand}"
-                                        CommandParameter="{Binding .}">
-                                    <iconPacks:PackIconLucide Kind="Trash2" Width="20" Height="20" />
+                                <!-- Increase button -->
+                                <Button Grid.Row="0" Grid.RowSpan="2" Grid.Column="4" 
+                                        Width="35" Height="35" Padding="0"
+                                        Classes="Success"
+                                        Command="{Binding $parent[ItemsControl].((viewModels:SetupViewModel)DataContext).IncreaseQuantityCommand}"
+                                        CommandParameter="{Binding .}"
+                                        IsEnabled="{Binding CanIncrease}">
+                                    <iconPacks:PackIconLucide Kind="Plus" Width="18" Height="18" />
                                 </Button>
+                                
+                                <!-- Team indicator -->
+                                <Border Grid.Row="0" Grid.RowSpan="2" Grid.Column="5" 
+                                        Width="8" VerticalAlignment="Stretch" Margin="5,0,0,0"
+                                        Background="{Binding Card.Color, Converter={StaticResource ColorToBrushConverter}}"
+                                        CornerRadius="4" />
                                 
                             </avalonia:SpacedGrid>
                         </styles:Card>
@@ -64,22 +146,13 @@
             </ItemsControl>
         </ScrollViewer>
         
-        <Button Grid.Row="2" Padding="10" Classes="Success"
-                HorizontalAlignment="Stretch"
-                Command="{Binding AddPlayerCommand}">
-            <StackPanel Orientation="Horizontal" Spacing="5">
-                <iconPacks:PackIconLucide Kind="Plus" Width="24" Height="24" />
-                
-                <TextBlock VerticalAlignment="Center" FontSize="20" Text="Ajouter un joueur" />
-            </StackPanel>
-        </Button>
-        
-        <Button Grid.Row="3" Padding="10" Theme="{StaticResource SolidButton}" Classes="Success"
-                HorizontalAlignment="Stretch"
-                Command="{Binding StartGameCommand}">
-            <StackPanel Orientation="Horizontal" Spacing="5">
+        <!-- Start game button -->
+        <Button Grid.Row="4" Padding="15" Theme="{StaticResource SolidButton}" 
+                Classes="Success" HorizontalAlignment="Stretch"
+                Command="{Binding StartGameCommand}"
+                IsEnabled="{Binding CanStartGame}">
+            <StackPanel Orientation="Horizontal" Spacing="8">
                 <iconPacks:PackIconLucide Kind="Play" Width="24" Height="24" />
-                
                 <TextBlock VerticalAlignment="Center" FontSize="20" Text="Lancer la partie!" />
             </StackPanel>
         </Button>
