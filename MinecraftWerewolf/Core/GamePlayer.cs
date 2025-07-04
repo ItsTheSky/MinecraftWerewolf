@@ -88,9 +88,6 @@ public partial class GamePlayer : ObservableObject
 
         if (Card!.Id == "creeper" && IsCharged)
         {
-            // we now ask the user to choose the 2 players aroudn the creeper
-            // LeftPlayer.Die(DeathSource.Creeper, level + 1)
-
             var vm = new ChargedCreeperSelectorViewModel(game);
             await OverlayDialog.ShowModal<ChargedCreeperSelectorDialog, ChargedCreeperSelectorViewModel>(
                 vm, "LocalHost", options: new OverlayDialogOptions()
@@ -107,7 +104,7 @@ public partial class GamePlayer : ObservableObject
             if (vm.RightPlayer != null)
                 deadPlayers.AddRange(await vm.RightPlayer.Base.Die(game, DeathSource.Creeper, level + 1));
         }
-        
+
         ActuallyDie();
         return deadPlayers;
     }

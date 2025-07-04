@@ -6,6 +6,7 @@
         <Nullable>enable</Nullable>
         <PublishProfile>wasm</PublishProfile>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+        <JsonSerializerIsReflectionEnabledByDefault>True</JsonSerializerIsReflectionEnabledByDefault>
     </PropertyGroup>
 
     <ItemGroup>
