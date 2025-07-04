@@ -24,12 +24,13 @@ public class IronGolem : GameCard
         return new BasePlayerSelectView { DataContext = new IronGolemViewModel(game, this) };
     }
 
-    public override bool ShouldActuallyDie(WerewolfGame game)
+    public override bool ShouldActuallyDie(WerewolfGame game, GamePlayer player)
     {
-        if (game.GameData.ContainsKey(DoubleLifeKey)) // if it contains, the golem was already dead one time
+        string playerSpecificKey = DoubleLifeKey + "_" + player.Name;
+        if (game.GameData.ContainsKey(playerSpecificKey)) // if it contains, this golem was already dead one time
             return true;
         
-        game.GameData.Add(DoubleLifeKey, true);
+        game.GameData.Add(playerSpecificKey, true);
         return false;
     }
 }

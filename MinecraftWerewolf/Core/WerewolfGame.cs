@@ -145,12 +145,21 @@ public partial class WerewolfGame : ObservableObject
         try
         {
             var killedPlayers = new List<PlayerDeath>();
+            
+            // First, determine who should actually die (to avoid order dependency)
+            var playersToKill = new List<GamePlayer>();
             foreach (var player in Players)
             {
-                if (player.ShouldDie && player.Card!.ShouldActuallyDie(this))
+                if (player.ShouldDie && player.Card!.ShouldActuallyDie(this, player))
                 {
-                    killedPlayers.AddRange(player.Die());
+                    playersToKill.Add(player);
                 }
+            }
+            
+            // Then apply all deaths at once
+            foreach (var player in playersToKill)
+            {
+                killedPlayers.AddRange(player.Die());
             }
 
             await OverlayDialog.ShowModal<DeathsSumUpDialog, DeathsSumUpViewModel>(

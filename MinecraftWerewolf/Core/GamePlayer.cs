@@ -79,7 +79,7 @@ public partial class GamePlayer : ObservableObject
             Love.Love = this; // restore love
         }
 
-        if (SleepingEndermite != null)
+        if (SleepingEndermite != null && !IsProtected)
         {
             deadPlayers.AddRange(SleepingEndermite.Die(DeathSource.Endermite, level + 1));
         }

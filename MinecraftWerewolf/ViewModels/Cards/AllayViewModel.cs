@@ -49,7 +49,25 @@ public partial class AllayViewModel : BasePlayerSelectViewModel
     
     private void UpdateListTypeAndCommand()
     {
-        if (!HasUsedHealPotion && DyingPlayers.Count > 0)
+        // If both potions are available, show choice buttons but default to heal if there are dying players
+        if (HasBothPotions)
+        {
+            if (DyingPlayers.Count > 0)
+            {
+                // Default to heal option but allow switching
+                ShowHealOption = true;
+                ShowDeathOption = false;
+                Filter = PlayerListType.OnlyDying;
+            }
+            else
+            {
+                // No dying players, default to death option
+                ShowDeathOption = true;
+                ShowHealOption = false;
+                Filter = PlayerListType.OnlyPartialAlive;
+            }
+        }
+        else if (!HasUsedHealPotion && DyingPlayers.Count > 0)
         {
             ShowHealOption = true;
             ShowDeathOption = false;
@@ -67,7 +85,6 @@ public partial class AllayViewModel : BasePlayerSelectViewModel
             ShowDeathOption = false;
             ShowHealOption = false;
         }
-        
     }
     
     [RelayCommand]
@@ -83,7 +100,7 @@ public partial class AllayViewModel : BasePlayerSelectViewModel
         else if (ShowDeathOption && !HasUsedDeathPotion)
         {
             // Kill the player
-            player.PrepareDeath(DeathSource.Witch);
+            player.PrepareDeath(DeathSource.Allay);
             game.GameData.Add(Allay.HasUsedDeathPotionKey, true);
             HasUsedDeathPotion = true;
         }
@@ -100,16 +117,22 @@ public partial class AllayViewModel : BasePlayerSelectViewModel
     [RelayCommand]
     public void SwitchToHealPotion()
     {
-        ShowHealOption = true;
-        ShowDeathOption = false;
-        Filter = PlayerListType.OnlyDying;
+        if (!HasUsedHealPotion)
+        {
+            ShowHealOption = true;
+            ShowDeathOption = false;
+            Filter = PlayerListType.OnlyDying;
+        }
     }
     
     [RelayCommand]
     public void SwitchToDeathPotion()
     {
-        ShowDeathOption = true;
-        ShowHealOption = false;
-        Filter = PlayerListType.OnlyPartialAlive;
+        if (!HasUsedDeathPotion)
+        {
+            ShowDeathOption = true;
+            ShowHealOption = false;
+            Filter = PlayerListType.OnlyPartialAlive;
+        }
     }
 }

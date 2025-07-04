@@ -66,7 +66,7 @@ public abstract class GameCard
 
     #endregion
 
-    public virtual bool ShouldActuallyDie(WerewolfGame game)
+    public virtual bool ShouldActuallyDie(WerewolfGame game, GamePlayer player)
     {
         return true;
     }

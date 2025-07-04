@@ -24,13 +24,9 @@ public class Endermite : GameCard
         return new BasePlayerSelectView { DataContext = new EndermiteViewModel(game, this) };
     }
 
-    public override bool ShouldActuallyDie(WerewolfGame game)
+    public override bool ShouldActuallyDie(WerewolfGame game, GamePlayer player)
     {
-        // don't die if we're not at home :)
-        return !game.Players.Any(p =>
-        {
-            Console.WriteLine($"Has sleeping endermite: {p.SleepingEndermite != null} - {p.Name}");
-            return p.SleepingEndermite != null;
-        });
+        // Check if THIS specific endermite is sleeping at someone's house
+        return !game.Players.Any(p => p.SleepingEndermite == player);
     }
 }

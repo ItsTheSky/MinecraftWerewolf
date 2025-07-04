@@ -17,20 +17,14 @@ public class Creeper : GameCard
     public override Color Color => Colors.Green;
     public override List<CardTeam> Teams => [CardTeam.Monster];
 
-    public override bool ShouldActuallyDie(WerewolfGame game)
+    public override bool ShouldActuallyDie(WerewolfGame game, GamePlayer player)
     {
-        var player = game.FindPlayerWithCard<Creeper>();
-        if (player != null)
-        {
-            if (player.IsCharged)
-                return true;
-            
-            Console.WriteLine("Creeper is charged!");
-            player.IsCharged = true;
-            return false;
-        }
+        if (player.IsCharged)
+            return true;
         
-        return base.ShouldActuallyDie(game);
+        Console.WriteLine("Creeper is charged!");
+        player.IsCharged = true;
+        return false;
     }
 
     public override Control CreateCardControl(WerewolfGame game)

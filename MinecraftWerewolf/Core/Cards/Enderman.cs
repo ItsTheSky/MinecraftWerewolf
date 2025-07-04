@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Media;
 using CommunityToolkit.Mvvm.Input;
@@ -20,6 +21,12 @@ public class Enderman : GameCard
     public override Color Color => Color.Parse("#CA00F8");
     public override List<CardTeam> Teams => [CardTeam.Monster];
     public override bool AllowMultiple => true;
+
+    public override bool ShouldBeCalled(WerewolfGame game)
+    {
+        // Check if at least one Enderman is not paralyzed and alive
+        return game.Players.Any(p => p.Card?.Id == "enderman" && p is { IsAlive: true, IsParalyzed: false });
+    }
 
     public override Control CreateCardControl(WerewolfGame game)
     {

@@ -4,7 +4,7 @@ public enum DeathSource
 {
     DayVote,
     Enderman,
-    Witch,
+    Allay,
     Love,
     Creeper,
     Endermite,

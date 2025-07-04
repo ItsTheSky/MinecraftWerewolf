@@ -58,13 +58,15 @@
                 Theme="{StaticResource SolidButton}"
                 Classes="Danger" Content="Utiliser la potion de dégâts"
                 Command="{Binding SwitchToDeathPotionCommand}"
-                IsVisible="{Binding ShowHealOption}"/>
+                IsVisible="{Binding ShowHealOption}"
+                IsEnabled="{Binding !HasUsedDeathPotion}"/>
         
         <Button Grid.Row="2" HorizontalAlignment="Stretch"
                 Theme="{StaticResource SolidButton}"
                 Classes="Success" Content="Utiliser la potion de soin"
                 Command="{Binding SwitchToHealPotionCommand}"
-                IsVisible="{Binding ShowDeathOption}"/>
+                IsVisible="{Binding ShowDeathOption}"
+                IsEnabled="{Binding !HasUsedHealPotion}"/>
         
         <!-- Player List -->
         <base:PlayerListDisplay Grid.Row="3" 
